@@ -16,11 +16,6 @@ Context 초기 파라메터: 어플리케이션에서 사용되는 공유된 문
 String value = getServletContext().getInitParameter("name");
 -->
 
-    <context-param>
-        <param-name>title</param-name>
-        <param-value>testApplication</param-value>
-    </context-param>
-
 <!-- 3. Servlet-매핑 요소 -->
 <!--  
 초기 파라메터를 포함해, 웹 애플리케이션을 구성하는 servlet 에 대한 정의.
@@ -33,11 +28,11 @@ String value = getServletConfig().getInitParameter("name");
 숫자가 작은 것 부터 먼저 로딩된다.
 -->
     <servlet>
-       <servlet-name>controller</servlet-name>
+       <servlet-name>appServlet</servlet-name>
        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
        <init-param>
             <param-name>contextConfigLocation</param-name>
-            <param-value>/WEB-INF/spring/appServlet/servlet-context.xml</param-value>
+            <param-value>/WEB-INF/app-servlet.xml</param-value>
         </init-param>
         <load-on-startup>1</load-on-startup>
     </servlet>
@@ -48,11 +43,11 @@ String value = getServletConfig().getInitParameter("name");
   
   
     <welcome-file-list>
-    <welcome-file>index.html</welcome-file>
-    <welcome-file>index.htm</welcome-file>
-    <welcome-file>index.jsp</welcome-file>
-    <welcome-file>default.html</welcome-file>
-    <welcome-file>default.htm</welcome-file>
-    <welcome-file>default.jsp</welcome-file>
+        <welcome-file>index.html</welcome-file>
+        <welcome-file>index.htm</welcome-file>
+        <welcome-file>index.jsp</welcome-file>
+        <welcome-file>default.html</welcome-file>
+        <welcome-file>default.htm</welcome-file>
+        <welcome-file>default.jsp</welcome-file>
     </welcome-file-list>
 </web-app>

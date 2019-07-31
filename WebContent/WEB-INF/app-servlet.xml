@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/mvc"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:beans="http://www.springframework.org/schema/beans"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <!-- DispatcherServlet Context: defines this servlet's request-processing infrastructure -->
+    
+    <!-- Enables the Spring MVC @Controller programming model -->
+    <annotation-driven />
+
+    <!-- 경로체크 -->
+    <resources mapping="/css/**" location="/css/" />
+    <resources mapping="/img/**" location="/img/" />
+    <resources mapping="/js/**" location="/js/" />
+    <resources mapping="/font/**" location="/font/" />
+
+    <!-- prefix suffix설정 -->
+    <beans:bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <beans:property name="prefix" value="/WEB-INF/views/" />
+        <beans:property name="suffix" value=".jsp" />
+    </beans:bean>
+    
+    
+    <!-- 컨트롤러 설정 -->
+    <!-- <context:component-scan base-package="com.honbabzone.tomcat.main.controller" />
+    <context:component-scan base-package="com.honbabzone.tomcat.mem.controller" />
+    <context:component-scan base-package="com.honbabzone.tomcat.board.simsim.controller" /> -->
+    
+    <!-- sql관련-->   
+    <!-- <context:component-scan base-package="sqlMap" /> -->
+    
+    <!-- service, DAO   -->
+    <!-- <context:component-scan base-package="com.honbabzone.tomcat.mem.dao" />
+    <context:component-scan base-package="com.honbabzone.tomcat.mem.service" />
+    
+    <context:component-scan base-package="com.honbabzone.tomcat.board.simsim.dao" />
+    <context:component-scan base-package="com.honbabzone.tomcat.board.simsim.service" /> -->
+    
+</beans:beans>

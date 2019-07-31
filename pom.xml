@@ -39,6 +39,7 @@
     <properties>
         <java.version>1.8.0</java.version>
         <jdk.level>1.8</jdk.level>
+        <org.springframework-version>5.1.5.RELEASE</org.springframework-version>
     </properties>
     
     <!-- 3. 저장소 설정 -->
@@ -101,6 +102,13 @@
             <artifactId>javax.servlet-api</artifactId>
             <version>4.0.1</version>
             <scope>provided</scope>
+        </dependency>
+        
+        <!-- Spring 사용시 -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-webmvc</artifactId>
+            <version>${org.springframework-version}</version>
         </dependency>
     </dependencies>
 </project>
