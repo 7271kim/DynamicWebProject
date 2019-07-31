@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+         xmlns="http://java.sun.com/xml/ns/javaee" 
+         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd" 
+         version="3.0">
+    
+<!-- 1. 웹 어플리케이션의 일반적 설명 -->
+    <display-name>DynamicWebProject</display-name>
+    <description>Web Study</description>
+    
+<!-- 2. Context 초기 파라메터 -->
+<!--     
+Context 초기 파라메터: 어플리케이션에서 사용되는 공유된 문자열 상수들을 선언합니다. 이것은 애플리케이션을
+설치하는 시스템 관리자가 변경할 수 있습니다. 이들 파라메터에 실질적으로 할당된 값들은 servlet 과 JSP page
+에서 다음과 같이 불러올 수 있습니다: 
+String value = getServletContext().getInitParameter("name");
+-->
+
+    <context-param>
+        <param-name>title</param-name>
+        <param-value>testApplication</param-value>
+    </context-param>
+
+<!-- 3. Servlet-매핑 요소 -->
+<!--  
+초기 파라메터를 포함해, 웹 애플리케이션을 구성하는 servlet 에 대한 정의.
+Servlet 초기 파라메터는 servlet 과 JSP page 에서 다음과 같이 불러올 수 있습니다:
+String value = getServletConfig().getInitParameter("name");
+* load-on-startup 설명
+톰캣 서버가 시작하는 시점은 아니고, 컨텍스트의 웹 애플리케이션이 톰캣 서버에 의해 인식되는 시점입니다.
+음의 정수인 경우 - 그 서블릿에 접근될 때 (즉, load-on-startup 엘리먼트가 없는 경우와 동일함)
+0 이거나 양의 정수인 경우 - 그 서블릿이 배치(deploy)될 때 (즉, 컨텍스트가 인식될 때)
+숫자가 작은 것 부터 먼저 로딩된다.
+-->
+    <servlet>
+       <servlet-name>controller</servlet-name>
+       <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+       <init-param>
+            <param-name>contextConfigLocation</param-name>
+            <param-value>/WEB-INF/spring/appServlet/servlet-context.xml</param-value>
+        </init-param>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>appServlet</servlet-name>
+        <url-pattern>/</url-pattern>
+    </servlet-mapping>
+  
+  
+    <welcome-file-list>
+    <welcome-file>index.html</welcome-file>
+    <welcome-file>index.htm</welcome-file>
+    <welcome-file>index.jsp</welcome-file>
+    <welcome-file>default.html</welcome-file>
+    <welcome-file>default.htm</welcome-file>
+    <welcome-file>default.jsp</welcome-file>
+    </welcome-file-list>
+</web-app>
