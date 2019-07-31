@@ -1,2 +1,2 @@
 # DynamicWebProject
-JSP 및 WEB관련
+WEB관련
