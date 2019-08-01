@@ -96,7 +96,7 @@
     </dependencyManagement> 
     -->
     <dependencies>
-         <!-- 기본 써블릿을 위한 -->
+         <!-- Spring아닌  기본 써블릿 써보기 위해서 -->
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
@@ -105,10 +105,18 @@
         </dependency>
         
         <!-- Spring 사용시 -->
+        <!-- 이제  MVC 패턴 가능 -->
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-webmvc</artifactId>
             <version>${org.springframework-version}</version>
+        </dependency>
+        
+        <!-- JSP에서 JSTL사용하기 위해 -->
+        <dependency>
+            <groupId>jstl</groupId>
+            <artifactId>jstl</artifactId>
+            <version>1.2</version>
         </dependency>
     </dependencies>
 </project>
