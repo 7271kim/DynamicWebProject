@@ -1,8 +1,52 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd">
-	
-	<!-- Root Context: defines shared resources visible to all other web components -->
-		
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.1.xsd
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd
+        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.1.xsd">
+    <!-- DB정도 암호화 -->
+    <!-- 
+        1. https://sourceforge.net/projects/jasypt/ 다운로드 후 bin파일  cmd
+         - encrypt input="비번" password="복호화를 위한 키값" algorithm="PBEWITHMD5ANDDES"
+         - 아웃풋 확인 
+         - properties에 추가 jdbc.password=ENC(아웃풋)
+         - 복호화를 위한 아래 3개 빈 추가 (암호화 할때 썼던 값들임) 
+    -->
+    <!-- 
+    ASOG_ENCRYPTION_KEY >> 서버에 놓을 요소! 환경변수로 지정할 키 값 export ASOG_ENCRYPTION_KEY={진짜 키}가 필요
+    eclipse에서는 환경변수 못 읽는다. 결론은 project -> run configuration 에 들어가면 직접 환경변수 설정할 수 있다는 것이다.
+    -->
+    <bean id="encryptorConfig" class="org.jasypt.encryption.pbe.config.EnvironmentPBEConfig">
+      <property name="algorithm" value="PBEWithMD5AndDES" />
+      <property name="passwordEnvName" value="ASOG_ENCRYPTION_KEY" />
+    </bean>
+   <bean id="encryptor" class="org.jasypt.encryption.pbe.StandardPBEStringEncryptor">
+      <property name="config" ref="encryptorConfig" />
+    </bean>    
+    <bean class="org.jasypt.spring31.properties.EncryptablePropertyPlaceholderConfigurer">
+      <constructor-arg ref="encryptor" />
+      <property name="locations">
+        <list>
+          <value>/WEB-INF/config/jdbc.properties</value>
+        </list>
+      </property>
+    </bean> 
+    
+    <context:property-placeholder location="/WEB-INF/config/jdbc.properties"/>
+    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+        <property name="driverClassName" value="${jdbc.driverClassName}" />
+        <property name="url" value="${jdbc.url}" />
+        <property name="username" value="${jdbc.username}" />
+        <property name="password" value="${jdbc.password}" />
+        <property name="maxActive" value="30" />
+        <property name="maxIdle" value="10" />
+        <property name="maxWait" value="1000" />
+        <property name="defaultAutoCommit" value="true" />
+    </bean>
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource" />
+        
+    </bean>
 </beans>

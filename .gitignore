@@ -13,6 +13,8 @@
 **/*.iml
 **/*.sublime-project
 **/*.sublime-workspace
+**/jdbc.properties
+
 ui.apps/src/main/content/jcr_root/.vlt-sync.log
 ui.apps/src/main/content/jcr_root/content
 ui.apps/src/main/content/jcr_root/libs
