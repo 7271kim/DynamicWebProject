@@ -15,6 +15,13 @@ Context 초기 파라메터: 어플리케이션에서 사용되는 공유된 문
 에서 다음과 같이 불러올 수 있습니다: 
 String value = getServletContext().getInitParameter("name");
 -->
+    <listener>
+        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+    </listener>
+    <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>/WEB-INF/root-context.xml</param-value>
+    </context-param>
 
 <!-- 3. Servlet-매핑 요소 -->
 <!--  
@@ -36,6 +43,8 @@ String value = getServletConfig().getInitParameter("name");
         </init-param>
         <load-on-startup>1</load-on-startup>
     </servlet>
+    <!-- 하나주의 -->
+    <!-- WebContent 아래 바로 index.jsp 혹은 html이 존재할 시 문제가 되는것은 controller에서value = "/"를 잡지 못한다.! 그러니 주의하기( index.jsp를 지우기) -->
     <servlet-mapping>
         <servlet-name>appServlet</servlet-name>
         <url-pattern>/</url-pattern>
