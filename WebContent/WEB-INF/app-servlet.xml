@@ -29,7 +29,7 @@
     <context:component-scan base-package="hello" />
     
     <!-- sql관련-->   
-    <!-- <context:component-scan base-package="sqlMap" /> -->
+    <context:component-scan base-package="sqlMap" />
     
     <!-- service, DAO   -->
     <!-- <context:component-scan base-package="com.honbabzone.tomcat.mem.dao" />

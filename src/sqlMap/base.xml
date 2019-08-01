@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="BASE">
+    <select id="getMemList" parameterType="base" resultType="base" >
+        SELECT ID, PW, NAME, EMAIL, ADDRESS, GENDER, AES_DECRYPT(UNHEX(HPNUMBER),SHA2('phoneEn',256)) HPNUMBER, iSACTIVITY,
+               EMAILTOKEN, LOGINCOUNT, TOTALLOGINCOUNT, AUTHORIZATION,
+               DATE_FORMAT(JOINDATE,'%Y-%m-%d') AS JOINDATE,
+               DATE_FORMAT(JOINUPDATE,'%Y-%m-%d') AS JOINUPDATE,
+               DATE_FORMAT(LASTLOGIN,'%Y-%m-%d') AS LASTLOGIN,
+               DATE_FORMAT(CANCELLOGIN,'%Y-%m-%d') AS CANCELLOGIN,
+               DATE_FORMAT(OUTDATE,'%Y-%m-%d') AS OUTDATE,
+               DATE_FORMAT(EMAILTOKENDATE,'%Y-%m-%dT%H:%i:%S') AS EMAILTOKENDATE
+        FROM tomcat_hohbabzone_mem
+        WHERE 1 = 1
+        <if test="where != null and where != ''">
+            <foreach collection="where" item="value" index="key">
+                AND ${key}=#{value} 
+            </foreach>
+        </if>
+        <if test="whereNot != null and whereNot != ''">
+            <foreach collection="whereNot" item="value" index="key">
+                AND ${key}!=#{value} 
+            </foreach>
+        </if>
+        <if test="like != null and like != ''">
+            <foreach collection="like" item="value" index="key">
+                AND ${key} LIKE CONCAT('%',#{value},'%')
+            </foreach>
+        </if>
+        ORDER BY JOINUPDATE DESC
+        <if test="like != null and like != ''">
+            AND
+            <foreach collection="like" item="value" index="key" separator="OR">
+                ${key} LIKE CONCAT('%',#{value},'%')
+            </foreach>
+        </if>
+    </select>
+</mapper>
+

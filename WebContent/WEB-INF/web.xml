@@ -49,6 +49,15 @@ String value = getServletConfig().getInitParameter("name");
         <servlet-name>appServlet</servlet-name>
         <url-pattern>/</url-pattern>
     </servlet-mapping>
+<!-- 4. log 관련 -->    
+    <listener>
+        <listener-class>org.springframework.web.util.Log4jConfigListener</listener-class>
+    </listener>
+    <context-param>
+        <param-name>log4jConfigLocation</param-name>
+        <param-value>/WEB-INF/log4j.xml</param-value>
+    </context-param>
+    
     
     <welcome-file-list>
         <welcome-file>index.html</welcome-file>

@@ -27,6 +27,10 @@ test2(resolvedData)
 </script>
 </head>
 <body>
-헤이 베이비
+헤이 베이비 ss
+ <c:forEach var="base" items="${list }">
+asada ${base.name}ss
+ </c:forEach>
+ dd
 </body>
 </html>
