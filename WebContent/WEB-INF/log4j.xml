@@ -8,7 +8,6 @@
             <param name="ConversionPattern" value="%d{HHmmss.SSS} [%-5p] %c{1}.%M():%L %m%n" />
         </layout>
     </appender>
-    
     <logger name="jdbc.connection" additivity="false">
         <level value="WARN" />
         <appender-ref ref="console" />
@@ -30,7 +29,7 @@
         <appender-ref ref="console" />
     </logger>
     <logger name="jdbc.resultsettable" additivity="false">
-        <level value="INFO" />
+        <level value="WARN" />
         <appender-ref ref="console" />
     </logger>
     
@@ -42,6 +41,7 @@
     
     <!-- Spring Frame work -->
    <logger name="org.springframework">
+        <level value="WARN" />
         <appender-ref ref="console" />
     </logger>
 
