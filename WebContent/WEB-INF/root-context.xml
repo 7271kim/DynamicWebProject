@@ -16,7 +16,11 @@
     -->
     <!-- 
     ASOG_ENCRYPTION_KEY >> 서버에 놓을 요소! 환경변수로 지정할 키 값 export ASOG_ENCRYPTION_KEY={진짜 키}가 필요
-    eclipse에서는 환경변수 못 읽는다. 결론은 project -> run configuration >> Enviroment >> ASOG_ENCRYPTION_KEY랑 그값 적용 ( 환경변수 설정할 수 있다는 것이다. )
+    eclipse에서는 환경변수 못 읽는다.
+    1. project -> run configuration >> Enviroment >> ASOG_ENCRYPTION_KEY랑 그값 적용 ( 환경변수 설정할 수 있다는 것이다. )
+    2. 혹은 전체 환경변수 추가 
+    UNIX/LINUX의 경우에는 export ASOG_ENCRYPTION_KEY=키값
+    Window의 경우에는 환경변수 ASOG_ENCRYPTION_KEY/키값 설정
     -->
     <bean id="encryptorConfig" class="org.jasypt.encryption.pbe.config.EnvironmentPBEConfig">
       <property name="algorithm" value="PBEWithMD5AndDES" />

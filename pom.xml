@@ -181,7 +181,8 @@
         
         <!-- 자동 Getter Setter -->
         <!-- 
-         jar 설치 >> ( 이클립스.exe 해당파일 검색 )
+          Download된 jar파일 위치로 가서 해당 jar 실행.
+           >> 이클립스 겁색 >> 지금사용하고 있는 이클립스.exe 찾기 >> 이클립스 재실행
         -->
        <dependency> 
             <groupId>org.projectlombok</groupId>
