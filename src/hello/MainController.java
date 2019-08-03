@@ -2,6 +2,7 @@ package hello;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.jsoup.Jsoup;
@@ -26,13 +27,13 @@ public class MainController {
         return "header-common"; 
     }
     
-    /* @RequestMapping(value = "/test", method = RequestMethod.GET)
+     @RequestMapping(value = "/test", method = RequestMethod.GET)
     public String goTT(BaseModel baseModel, Model model) {
         List<BaseModel> list = new ArrayList<BaseModel>();
         list = baseService.getMemList(baseModel);
         model.addAttribute("list", list);
         return "header-common"; 
-    }*/
+    }
     
     @RequestMapping(value = "/parsing", method = RequestMethod.GET)
     public String getParsing(BaseModel baseModel, Model model) {

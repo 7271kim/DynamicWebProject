@@ -181,7 +181,7 @@
         
         <!-- 자동 Getter Setter -->
         <!-- 
-         jar 설치 ( 이클립스.exe 해당파일 검색 )
+         jar 설치 >> ( 이클립스.exe 해당파일 검색 )
         -->
        <dependency> 
             <groupId>org.projectlombok</groupId>
