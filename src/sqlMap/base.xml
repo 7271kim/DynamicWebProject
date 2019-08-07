@@ -1,16 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="BASE">
-    <select id="getMemList" parameterType="base" resultType="base" >
-        SELECT ID, PW, NAME, EMAIL, ADDRESS, GENDER, AES_DECRYPT(UNHEX(HPNUMBER),SHA2('phoneEn',256)) HPNUMBER, iSACTIVITY,
-               EMAILTOKEN, LOGINCOUNT, TOTALLOGINCOUNT, AUTHORIZATION,
-               DATE_FORMAT(JOINDATE,'%Y-%m-%d') AS JOINDATE,
-               DATE_FORMAT(JOINUPDATE,'%Y-%m-%d') AS JOINUPDATE,
-               DATE_FORMAT(LASTLOGIN,'%Y-%m-%d') AS LASTLOGIN,
-               DATE_FORMAT(CANCELLOGIN,'%Y-%m-%d') AS CANCELLOGIN,
-               DATE_FORMAT(OUTDATE,'%Y-%m-%d') AS OUTDATE,
-               DATE_FORMAT(EMAILTOKENDATE,'%Y-%m-%dT%H:%i:%S') AS EMAILTOKENDATE
-        FROM tomcat_hohbabzone_mem
+    <select id="getKospi" parameterType="kospi" resultType="kospi" >
+        SELECT DATE, KOSPI
+        FROM tomcat_kospi
         WHERE 1 = 1
         <if test="where != null and where != ''">
             <foreach collection="where" item="value" index="key">
@@ -23,17 +16,163 @@
             </foreach>
         </if>
         <if test="like != null and like != ''">
-            <foreach collection="like" item="value" index="key">
-                AND ${key} LIKE CONCAT('%',#{value},'%')
+            AND
+            <foreach collection="like" item="value" index="key" separator="OR">
+                ${key} LIKE CONCAT('%',#{value},'%')
             </foreach>
         </if>
-        ORDER BY JOINUPDATE DESC
+        ORDER BY DATE ASC
+        <if test="limitEnd != null and limitEnd != ''">
+           LIMIT #{limitStart}, #{limitEnd}
+        </if>
+    </select>
+    
+    <insert id="settingKospi" parameterType="kospi">
+        INSERT INTO tomcat_kospi
+                (DATE,KOSPI) 
+        VALUES ( #{date},#{kospi} );
+    </insert>
+    
+    <update id="kospiUpdate" parameterType="kospi">
+        UPDATE tomcat_kospi
+            <trim prefix="SET" suffixOverrides=",">
+               <if test="date != null and date != ''">DATE=#{date},</if>
+               <if test="kospi != null and kospi != ''">KOSPI=#{kospi},</if>
+            </trim>
+            WHERE 1 = 1
+            <if test="where != null and where != ''">
+                <foreach collection="where" item="value" index="key">
+                    AND ${key}=#{value} 
+                </foreach>
+            </if>
+            <if test="whereNot != null and whereNot != ''">
+                <foreach collection="whereNot" item="value" index="key">
+                 AND ${key}!=#{value} 
+                 </foreach>
+            </if>
+            <if test="like != null and like != ''">
+                <foreach collection="like" item="value" index="key">
+                    AND ${key} LIKE CONCAT('%',#{value},'%')
+                </foreach>
+            </if>
+    </update>
+    
+    <!-- 200 데이터 -->
+    <select id="getKospi200" parameterType="company" resultType="company" >
+        SELECT SEQ,COMPANYNAME,COMPANYCODE 
+        FROM tomcat_company
+        WHERE 1 = 1
+        <if test="where != null and where != ''">
+            <foreach collection="where" item="value" index="key">
+                AND ${key}=#{value} 
+            </foreach>
+        </if>
+        <if test="whereNot != null and whereNot != ''">
+            <foreach collection="whereNot" item="value" index="key">
+                AND ${key}!=#{value} 
+            </foreach>
+        </if>
         <if test="like != null and like != ''">
             AND
             <foreach collection="like" item="value" index="key" separator="OR">
                 ${key} LIKE CONCAT('%',#{value},'%')
             </foreach>
         </if>
+        ORDER BY SEQ DESC
+        <if test="limitEnd != null and limitEnd != ''">
+           LIMIT #{limitStart}, #{limitEnd}
+        </if>
     </select>
+    
+    <select id="getTodayCompany" parameterType="company" resultType="company" >
+        SELECT SEQ, COMPANYNAME, company.COMPANYCODE COMPANYCODE, DATE, TODAYPRICE, TODAYUPDOWN, TODAYRATE, FORIGIN, FORIGNPERSENT 
+        FROM tomcat_company_today company JOIN tomcat_company kospi200 ON company.COMPANYCODE = kospi200.COMPANYCODE
+        WHERE 1 = 1
+        <if test="where != null and where != ''">
+            <foreach collection="where" item="value" index="key">
+                AND ${key}=#{value} 
+            </foreach>
+        </if>
+        <if test="whereNot != null and whereNot != ''">
+            <foreach collection="whereNot" item="value" index="key">
+                AND ${key}!=#{value} 
+            </foreach>
+        </if>
+        <if test="like != null and like != ''">
+            AND
+            <foreach collection="like" item="value" index="key" separator="OR">
+                ${key} LIKE CONCAT('%',#{value},'%')
+            </foreach>
+        </if>
+        ORDER BY SEQ
+        <if test="limitEnd != null and limitEnd != ''">
+           LIMIT #{limitStart}, #{limitEnd}
+        </if>
+    </select>
+    
+    <insert id="settingKospi200" parameterType="company">
+        INSERT INTO tomcat_company
+                (COMPANYNAME,COMPANYCODE) 
+        VALUES ( #{companyName},#{companyCode} );
+    </insert>
+    
+    <insert id="settingTodayCompany" parameterType="company">
+        INSERT INTO tomcat_company_today
+                (COMPANYCODE,DATE,TODAYPRICE,TODAYUPDOWN,TODAYRATE) 
+        VALUES ( #{companyCode},#{date},#{todayPrice},#{todayUpdown},#{todayRate} );
+    </insert>
+    
+    <update id="updateTodayCompany" parameterType="company">
+        UPDATE tomcat_company_today
+            <trim prefix="SET" suffixOverrides=",">
+               <if test="companyCode != null and companyCode != ''">COMPANYCODE=#{companyCode},</if>
+               <if test="date != null and date != ''">DATE=#{date},</if>
+               <if test="todayPrice != null and todayPrice != ''">TODAYPRICE=#{todayPrice},</if>
+               <if test="todayUpdown != null and todayUpdown != ''">TODAYUPDOWN=#{todayUpdown},</if>
+               <if test="todayRate != null and todayRate != ''">TODAYRATE=#{todayRate},</if>
+               <if test="forigin != null and forigin != ''">FORIGIN=#{forigin},</if>
+               <if test="forignPersent != null and forignPersent != ''">FORIGNPERSENT=#{forignPersent},</if>
+            </trim>
+            WHERE 1 = 1
+            <if test="where != null and where != ''">
+                <foreach collection="where" item="value" index="key">
+                    AND ${key}=#{value} 
+                </foreach>
+            </if>
+            <if test="whereNot != null and whereNot != ''">
+                <foreach collection="whereNot" item="value" index="key">
+                 AND ${key}!=#{value} 
+                 </foreach>
+            </if>
+            <if test="like != null and like != ''">
+                <foreach collection="like" item="value" index="key">
+                    AND ${key} LIKE CONCAT('%',#{value},'%')
+                </foreach>
+            </if>
+    </update>
+    
+    <update id="updateKospi200" parameterType="company">
+        UPDATE tomcat_company
+            <trim prefix="SET" suffixOverrides=",">
+               <if test="companyName != null and companyName != ''">COMPANYNAME=#{companyName},</if>
+               <if test="companyCode != null and companyCode != ''">COMPANYCODE=#{companyCode},</if>
+            </trim>
+            WHERE 1 = 1
+            <if test="where != null and where != ''">
+                <foreach collection="where" item="value" index="key">
+                    AND ${key}=#{value} 
+                </foreach>
+            </if>
+            <if test="whereNot != null and whereNot != ''">
+                <foreach collection="whereNot" item="value" index="key">
+                 AND ${key}!=#{value} 
+                 </foreach>
+            </if>
+            <if test="like != null and like != ''">
+                <foreach collection="like" item="value" index="key">
+                    AND ${key} LIKE CONCAT('%',#{value},'%')
+                </foreach>
+            </if>
+    </update>
 </mapper>
 

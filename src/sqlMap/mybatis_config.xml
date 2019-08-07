@@ -13,6 +13,8 @@
 
     <typeAliases>
         <typeAlias type="hello.BaseModel" alias="base" />
+        <typeAlias type="hello.KospiModel" alias="kospi" />
+        <typeAlias type="hello.CompanyModel" alias="company" />
     </typeAliases>
 
     <mappers>
