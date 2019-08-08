@@ -1,7 +1,15 @@
 package hello;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -53,5 +61,164 @@ public class BaseServiceImpl implements BaseService {
     @Override
     public void updateKospi200(CompanyModel company) {
         baseDao.updateKospi200(company);
+    }
+
+    @org.springframework.scheduling.annotation.Scheduled(cron="0 0 18 * * MON-FRI")
+    @Override
+    public void scheduled() {
+        settingsKospiToday();
+        settingTodayCompany();
+        settingsTodayForign();
+    }
+    
+    private void settingTodayCompany() {
+        SimpleDateFormat format = new SimpleDateFormat ( "yyyy.MM.dd");
+        Date today = new Date();
+        String date = format.format(today);
+        try {
+            for(int index = 1; index <= 20; index++) {
+                String urlKospi = "https://finance.naver.com/sise/entryJongmok.nhn?&page="+index;
+                Document doc;
+                doc = Jsoup.connect(urlKospi).get();
+                Element table           = doc.getElementsByTag("table").get(0);
+                Elements companyLow      = table.select("tbody tr");
+                for( Element item : companyLow ) {
+                    String companyName= "",companyCode= "",todayPrice= "",todayUpdown= "",todayRate = "";
+                    if(!item.select(".ctg a").isEmpty()) {
+                        Element companyElement = item.select(".ctg a").first();
+                        companyName  = companyElement.text();
+                        companyCode  = companyElement.attr("href").split("code=")[1];
+                    }
+                    if(!item.select(".number_2").isEmpty()) {
+                        todayPrice = item.select(".number_2").first().text();
+                    }
+                    if(!item.select(".rate_down2 .tah").isEmpty()) {
+                        Element todayUpdownElement = item.select(".rate_down2 .tah").first();
+                        String number = todayUpdownElement.text().replaceAll(",", "");
+                        todayUpdown = todayUpdownElement.hasAttr("red02") ? number : "-"+number;
+                    }
+                    if(!item.select(".number_2 .tah").isEmpty()) {
+                        Element rateElement = item.select(".number_2 .tah").first();
+                        todayRate         = rateElement.text().replaceAll("%", "");
+                    }
+                    if(companyCode!="") {
+                        CompanyModel company = new CompanyModel( companyName, companyCode, date, todayPrice, todayUpdown, todayRate);
+                        CompanyModel temp = getKospi200One(companyCode);
+                        if( temp.getCompanyCode() == null ) {
+                            settingKospi200(company);
+                        } 
+                        CompanyModel temp2 = getTodayCompanyOne(companyCode,date);
+                        if( temp2.getCompanyCode() == null ) {
+                            settingTodayCompany(company);
+                        } else {
+                            HashMap<String, String> where = new HashMap<>();
+                            where.put("COMPANYCODE",companyCode);
+                            where.put("DATE",date);
+                            company.setWhere(where);
+                            updateTodayCompany(company);
+                        }
+                    }
+                }
+            }
+        } catch (Exception e) {
+        }
+   }
+    
+    private void settingsTodayForign() {
+        SimpleDateFormat format = new SimpleDateFormat ( "yyyy.MM.dd");
+        Date today = new Date();
+        String date = format.format(today);
+        try {
+            CompanyModel companyModel = new CompanyModel();
+            HashMap<String, String> where = new HashMap<>();
+            where.put("DATE",date);
+            companyModel.setWhere(where);
+            
+            List<CompanyModel> list = new ArrayList<CompanyModel>();
+            list = getTodayCompany(companyModel);
+            
+            for(int index = 0; index < list.size(); index++) {
+                String companyCode = list.get(index).getCompanyCode();
+                String url = "https://finance.naver.com/item/frgn.nhn?code="+companyCode;
+                Document doc;
+                doc = Jsoup.connect(url).get();
+                if(doc.select(".inner_sub table") != null) {
+                    Element table                     = doc.select(".inner_sub table").get(1);
+                    Element todayKospiRow     = table.select("tbody tr").get(3);
+                    String forigin = todayKospiRow.select("td").get(6).text();
+                    String forignPersent = todayKospiRow.select("td").get(8).text();
+                    CompanyModel temp = new CompanyModel();
+                    temp.setForigin(forigin);
+                    temp.setForignPersent(forignPersent);
+                    where.put("COMPANYCODE",companyCode);
+                    temp.setWhere(where);
+                    updateTodayCompany(temp);
+                }
+            }
+        } catch (Exception e) {
+        }
+   }
+    
+   private void settingsKospiToday() {
+        try {
+            String urlKospi = "https://finance.naver.com/sise/sise_index_day.nhn?code=KOSPI&page=1";
+            Document doc;
+            doc = Jsoup.connect(urlKospi).get();
+            Element table           = doc.getElementsByTag("table").get(0);
+            Element todayKospiRow   = table.select("tbody tr").get(2);
+            String today            = todayKospiRow.getElementsByTag("td").get(0).text();
+            String kospi            = todayKospiRow.getElementsByTag("td").get(1).text();
+            KospiModel kospiToday = new KospiModel(today, kospi);
+            KospiModel temp = getOne(today);
+            if( temp.getDate() == null ) {
+                settingKospi(kospiToday);
+            } else {
+                HashMap<String, String> where = new HashMap<>();
+                where.put("DATE",today);
+                kospiToday.setWhere(where);
+                kospiUpdate(kospiToday);
+            }
+        } catch (Exception e) {
+        }
+     }
+    
+    private KospiModel getOne ( String date ) {
+        HashMap<String, String> where = new HashMap<>();
+        KospiModel bean = new KospiModel();
+        where.put("DATE", date);
+        bean.setWhere(where);
+        List<KospiModel> lists = getKospi(bean);
+        if(lists.size() > 0 ) {
+            bean = lists.get(0);
+        }
+        
+        return bean;
+    }
+    
+    private CompanyModel getKospi200One ( String companyCode ) {
+        HashMap<String, String> where = new HashMap<>();
+        CompanyModel bean = new CompanyModel();
+        where.put("COMPANYCODE", companyCode);
+        bean.setWhere(where);
+        List<CompanyModel> lists = getKospi200(bean);
+        if(lists.size() > 0 ) {
+            bean = lists.get(0);
+        }
+        
+        return bean;
+    }
+    
+    private CompanyModel getTodayCompanyOne ( String companyCode, String date ) {
+        HashMap<String, String> where = new HashMap<>();
+        CompanyModel bean = new CompanyModel();
+        where.put("company.COMPANYCODE", companyCode);
+        where.put("DATE", date);
+        bean.setWhere(where);
+        List<CompanyModel> lists = getTodayCompany(bean);
+        if(lists.size() > 0 ) {
+            bean = lists.get(0);
+        }
+        
+        return bean;
     }
 }

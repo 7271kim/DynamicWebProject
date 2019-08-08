@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -54,9 +53,7 @@ public class MainController {
     
     @RequestMapping(value = "/settings", method = RequestMethod.GET)
     public String settings( Model model, KospiModel kospiModel ) {
-        settingsKospiToday();
-        settingTodayCompany();
-        settingsTodayForign();
+        baseService.scheduled();
         return "showing"; 
     }
     

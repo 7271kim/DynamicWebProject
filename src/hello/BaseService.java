@@ -13,5 +13,6 @@ public interface BaseService {
     public void settingTodayCompany(CompanyModel company);
     public void updateTodayCompany(CompanyModel company);
     public void updateKospi200(CompanyModel company);
+    public void scheduled();
     
 }
