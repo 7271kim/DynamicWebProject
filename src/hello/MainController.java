@@ -2,9 +2,11 @@ package hello;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -16,6 +18,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.sun.org.apache.bcel.internal.generic.LUSHR;
+
 @Controller
 public class MainController {
     @Autowired
@@ -23,9 +27,64 @@ public class MainController {
     @Autowired
     AsyncService asyncService;
     
+    @RequestMapping(value = "/test", method = RequestMethod.GET)
+    public String goTest(Model model) {
+        return "test"; 
+    }
+    
     @RequestMapping(value = "/", method = RequestMethod.GET)
-    public String goMain() {
-        return "header-common"; 
+    public String goMain(Model model) {
+        KospiModel kospiModel           = new KospiModel();
+        CompanyModel companyModel       = new CompanyModel();
+        List<KospiModel> kospiValue     = new ArrayList<KospiModel>();
+        Map<String, Map<String, Map<String, String>>> companyList = new HashMap<String, Map<String,Map<String,String>>>();
+        
+        List<CompanyModel> kospi200     = new ArrayList<CompanyModel>();
+        kospi200 = baseService.getKospi200(companyModel);
+        
+        for( CompanyModel item : kospi200 ) {
+            
+            String companyCode = item.getCompanyCode();
+            
+            CompanyModel search       = new CompanyModel();
+            HashMap<String, String> where = new HashMap<>();
+            where.put("kospi200.COMPANYCODE",companyCode);
+            search.setWhere(where);
+            
+            List<CompanyModel> tempList = new ArrayList<CompanyModel>();
+            tempList = baseService.getTodayCompany(search);
+            
+            Map<String, Map<String, String>> companys = new HashMap<String, Map<String,String>>(); 
+            
+            for( CompanyModel tempCompany : tempList ) {
+                Map<String, String> companyData = new HashMap<String, String>();
+                companyData.put("companyName", tempCompany.getCompanyName());
+                companyData.put("todayPrice", tempCompany.getTodayPrice());
+                companyData.put("forigin", tempCompany.getForigin());
+                companys.put(tempCompany.getDate(),companyData);
+            }
+            companyList.put(companyCode, companys);
+        }
+
+        kospiValue = baseService.getKospi(kospiModel);
+        
+        Map<String, String> kospiKeys = new HashMap<String, String>();
+        List keysSort = new ArrayList<String>(0);
+        kospi200 = baseService.getKospi200(companyModel);
+        for( CompanyModel item : kospi200 ) {
+            kospiKeys.put(item.getCompanyCode(), item.getCompanyName());
+            keysSort.add(item.getCompanyCode());
+        }
+        List<String> dateSort           = new ArrayList<String>(companyList.get("005930").keySet());
+        Collections.sort(dateSort);
+        
+        model.addAttribute("KospiValue", kospiValue);
+        model.addAttribute("companyList", companyList);
+        model.addAttribute("kospiKeys", kospiKeys);
+        model.addAttribute("keysSort", keysSort);
+        model.addAttribute("dateSort", dateSort);
+        
+        return "list"; 
     }
     
     @RequestMapping(value = "/showing", method = RequestMethod.GET)

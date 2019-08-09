@@ -90,4 +90,7 @@
             </list>
         </property>
     </bean> -->
+    
+    <!-- 필터 테스트 -->
+    <bean id="corsFilter" class="hello.FilterChain" />
 </beans>

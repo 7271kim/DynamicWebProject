@@ -15,7 +15,7 @@
     <annotation-driven />
 
     <!-- 경로체크 -->
-    <resources mapping="/css/**" location="/css/" />
+    <resources mapping="/css/**" location="WEB-INF/css/" />
     <resources mapping="/img/**" location="/img/" />
     <resources mapping="/js/**" location="/js/" />
     <resources mapping="/font/**" location="/font/" />

@@ -78,7 +78,7 @@
                 ${key} LIKE CONCAT('%',#{value},'%')
             </foreach>
         </if>
-        ORDER BY SEQ DESC
+        ORDER BY SEQ ASC
         <if test="limitEnd != null and limitEnd != ''">
            LIMIT #{limitStart}, #{limitEnd}
         </if>
@@ -104,7 +104,7 @@
                 ${key} LIKE CONCAT('%',#{value},'%')
             </foreach>
         </if>
-        ORDER BY SEQ
+        ORDER BY SEQ ASC
         <if test="limitEnd != null and limitEnd != ''">
            LIMIT #{limitStart}, #{limitEnd}
         </if>
