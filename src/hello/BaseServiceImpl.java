@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -63,20 +64,16 @@ public class BaseServiceImpl implements BaseService {
         baseDao.updateKospi200(company);
     }
 
-    @org.springframework.scheduling.annotation.Scheduled(cron="0 0 18 * * MON-FRI")
+    @org.springframework.scheduling.annotation.Scheduled(cron="0 0 22 * * MON-FRI")
     @Override
     public void scheduled() {
+        settingsKospi100();
         settingsKospiToday();
         settingTodayCompany();
-        settingsTodayForign();
     }
-    
-    private void settingTodayCompany() {
-        SimpleDateFormat format = new SimpleDateFormat ( "yyyy.MM.dd");
-        Date today = new Date();
-        String date = format.format(today);
+    private void settingsKospi100() {
         try {
-            for(int index = 1; index <= 20; index++) {
+            for(int index = 1; index <= 10; index++) {
                 String urlKospi = "https://finance.naver.com/sise/entryJongmok.nhn?&page="+index;
                 Document doc;
                 doc = Jsoup.connect(urlKospi).get();
@@ -87,36 +84,15 @@ public class BaseServiceImpl implements BaseService {
                     if(!item.select(".ctg a").isEmpty()) {
                         Element companyElement = item.select(".ctg a").first();
                         companyName  = companyElement.text();
+                        System.out.println(companyName);
                         companyCode  = companyElement.attr("href").split("code=")[1];
                     }
-                    if(!item.select(".number_2").isEmpty()) {
-                        todayPrice = item.select(".number_2").first().text();
-                    }
-                    if(!item.select(".rate_down2 .tah").isEmpty()) {
-                        Element todayUpdownElement = item.select(".rate_down2 .tah").first();
-                        String number = todayUpdownElement.text().replaceAll(",", "");
-                        todayUpdown = todayUpdownElement.hasAttr("red02") ? number : "-"+number;
-                    }
-                    if(!item.select(".number_2 .tah").isEmpty()) {
-                        Element rateElement = item.select(".number_2 .tah").first();
-                        todayRate         = rateElement.text().replaceAll("%", "");
-                    }
                     if(companyCode!="") {
-                        CompanyModel company = new CompanyModel( companyName, companyCode, date, todayPrice, todayUpdown, todayRate);
+                        CompanyModel company = new CompanyModel( companyName, companyCode);
                         CompanyModel temp = getKospi200One(companyCode);
                         if( temp.getCompanyCode() == null ) {
                             settingKospi200(company);
                         } 
-                        CompanyModel temp2 = getTodayCompanyOne(companyCode,date);
-                        if( temp2.getCompanyCode() == null ) {
-                            settingTodayCompany(company);
-                        } else {
-                            HashMap<String, String> where = new HashMap<>();
-                            where.put("COMPANYCODE",companyCode);
-                            where.put("DATE",date);
-                            company.setWhere(where);
-                            updateTodayCompany(company);
-                        }
                     }
                 }
             }
@@ -124,40 +100,43 @@ public class BaseServiceImpl implements BaseService {
         }
    }
     
-    private void settingsTodayForign() {
-        SimpleDateFormat format = new SimpleDateFormat ( "yyyy.MM.dd");
-        Date today = new Date();
-        String date = format.format(today);
+    private void settingTodayCompany() {
+        CompanyModel companyModel = new CompanyModel();
+        List<CompanyModel> companyList = getKospi200(companyModel);
         try {
-            CompanyModel companyModel = new CompanyModel();
-            HashMap<String, String> where = new HashMap<>();
-            where.put("DATE",date);
-            companyModel.setWhere(where);
-            
-            List<CompanyModel> list = new ArrayList<CompanyModel>();
-            list = getTodayCompany(companyModel);
-            
-            for(int index = 0; index < list.size(); index++) {
-                String companyCode = list.get(index).getCompanyCode();
+            for (CompanyModel compay : companyList) {
+                String companyCode = compay.getCompanyCode();
+                String companyName = compay.getCompanyName();
                 String url = "https://finance.naver.com/item/frgn.nhn?code="+companyCode;
                 Document doc;
                 doc = Jsoup.connect(url).get();
                 if(doc.select(".inner_sub table") != null) {
                     Element table                     = doc.select(".inner_sub table").get(1);
                     Element todayKospiRow     = table.select("tbody tr").get(3);
+                    String todayDate  = todayKospiRow.select("td").get(0).text();
+                    String todayPrice = todayKospiRow.select("td").get(1).text();
+                    String number = todayKospiRow.select("td").get(2).text().replaceAll(",", "");
+                    String todayUpdown = todayKospiRow.select("td").get(2).hasAttr("red02") ? number : "-"+number;
+                    String todayRate         = todayKospiRow.select("td").get(3).text().replaceAll("%", "");
                     String forigin = todayKospiRow.select("td").get(6).text();
                     String forignPersent = todayKospiRow.select("td").get(8).text();
-                    CompanyModel temp = new CompanyModel();
-                    temp.setForigin(forigin);
-                    temp.setForignPersent(forignPersent);
-                    where.put("COMPANYCODE",companyCode);
-                    temp.setWhere(where);
-                    updateTodayCompany(temp);
+                    CompanyModel thisCompany = new CompanyModel(companyName, companyCode, todayDate, todayPrice, todayUpdown, todayRate, forigin, forignPersent);
+                    CompanyModel temp = getTodayCompanyOne(companyCode, todayDate);
+                    if( temp.equals(null)) {
+                        settingTodayCompany(thisCompany);
+                    }else {
+                        HashMap<String, String> where = new HashMap<>();
+                        where.put("COMPANYCODE",companyCode);
+                        where.put("DATE",todayDate);
+                        thisCompany.setWhere(where);
+                        updateTodayCompany(thisCompany);
+                    }
                 }
             }
         } catch (Exception e) {
+            System.out.println(e);
         }
-   }
+    }
     
    private void settingsKospiToday() {
         try {
