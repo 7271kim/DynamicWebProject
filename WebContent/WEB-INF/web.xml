@@ -22,6 +22,11 @@ String value = getServletContext().getInitParameter("name");
         <param-name>contextConfigLocation</param-name>
         <param-value>/WEB-INF/root-context.xml</param-value>
     </context-param>
+    <!-- webAppRootKey을 설정해줘야  동일 톰캣을 쓰는 다른 프로젝트에서 log4j를 쓸때 구분자 역할을 할 수 있다.-->
+    <context-param>
+        <param-name>webAppRootKey</param-name>
+        <param-value>DynamicWebProject.Root</param-value>
+    </context-param>
 
 <!-- 3. Servlet-매핑 요소 -->
 <!--  
