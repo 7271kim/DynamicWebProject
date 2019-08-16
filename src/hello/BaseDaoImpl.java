@@ -63,5 +63,15 @@ public class BaseDaoImpl implements BaseDao {
     public void updateKospi200(CompanyModel company) {
         sqlSession.update("BASE.updateKospi200",company);
     }
+
+    @Override
+    public List<LottoModel> getLotto(LottoModel lottoModel) {
+        return sqlSession.selectList("LOTTO.getLotto",lottoModel);
+    }
+
+    @Override
+    public List<LottoModel> getLottoDetail(LottoModel lottoModel) {
+        return sqlSession.selectList("LOTTO.getLottoDetail",lottoModel);
+    }
   
 }

@@ -64,6 +64,16 @@ public class BaseServiceImpl implements BaseService {
         baseDao.updateKospi200(company);
     }
 
+    @Override
+    public List<LottoModel> getLotto(LottoModel lottoModel) {
+        return baseDao.getLotto(lottoModel);
+    }
+    @Override
+    public List<LottoModel> getLottoDetail(LottoModel lottoModel) {
+        return baseDao.getLottoDetail(lottoModel);
+    }
+    
+
     @org.springframework.scheduling.annotation.Scheduled(cron="0 0 22 * * MON-FRI")
     @Override
     public void scheduled() {
@@ -80,7 +90,7 @@ public class BaseServiceImpl implements BaseService {
                 Element table           = doc.getElementsByTag("table").get(0);
                 Elements companyLow      = table.select("tbody tr");
                 for( Element item : companyLow ) {
-                    String companyName= "",companyCode= "",todayPrice= "",todayUpdown= "",todayRate = "";
+                    String companyName= "",companyCode= "";
                     if(!item.select(".ctg a").isEmpty()) {
                         Element companyElement = item.select(".ctg a").first();
                         companyName  = companyElement.text();
@@ -200,4 +210,5 @@ public class BaseServiceImpl implements BaseService {
         
         return bean;
     }
+
 }

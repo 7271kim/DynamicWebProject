@@ -104,6 +104,12 @@
             <version>4.0.1</version>
             <scope>provided</scope>
         </dependency>
+        <!-- StringUtils.join()사용하기위해 -->
+        <dependency>
+		    <groupId>org.apache.commons</groupId>
+		    <artifactId>commons-lang3</artifactId>
+		    <version>3.6</version>
+		</dependency>
         
         <!-- Spring 사용시 -->
         <!-- 이제  MVC 패턴 가능 -->

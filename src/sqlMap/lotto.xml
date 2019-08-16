@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="LOTTO">
+    <select id="getLotto" parameterType="lotto" resultType="lotto" >
+        SELECT DATE, NUMBER
+        FROM lotto_data
+        WHERE 1 = 1
+        <if test="where != null and where != ''">
+            <foreach collection="where" item="value" index="key">
+                AND ${key}=#{value} 
+            </foreach>
+        </if>
+        <if test="whereNot != null and whereNot != ''">
+            <foreach collection="whereNot" item="value" index="key">
+                AND ${key}!=#{value} 
+            </foreach>
+        </if>
+        <if test="like != null and like != ''">
+            AND
+            <foreach collection="like" item="value" index="key" separator="OR">
+                ${key} LIKE CONCAT('%',#{value},'%')
+            </foreach>
+        </if>
+        ORDER BY DATE DESC
+        <if test="limitEnd != null and limitEnd != ''">
+           LIMIT #{limitStart}, #{limitEnd}
+        </if>
+    </select>
+    <select id="getLottoDetail" parameterType="lotto" resultType="lotto" >
+        SELECT NUMBER, NUMBER_TWO, VALUE
+        FROM lotto_number_total
+        WHERE 1 = 1
+        <if test="where != null and where != ''">
+            <foreach collection="where" item="value" index="key">
+                AND ${key}=#{value} 
+            </foreach>
+        </if>
+        <if test="whereNot != null and whereNot != ''">
+            <foreach collection="whereNot" item="value" index="key">
+                AND ${key}!=#{value} 
+            </foreach>
+        </if>
+        <if test="like != null and like != ''">
+            AND
+            <foreach collection="like" item="value" index="key" separator="OR">
+                ${key} LIKE CONCAT('%',#{value},'%')
+            </foreach>
+        </if>
+        <if test="limitEnd != null and limitEnd != ''">
+           LIMIT #{limitStart}, #{limitEnd}
+        </if>
+    </select>
+</mapper>
+

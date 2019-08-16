@@ -15,10 +15,12 @@
         <typeAlias type="hello.BaseModel" alias="base" />
         <typeAlias type="hello.KospiModel" alias="kospi" />
         <typeAlias type="hello.CompanyModel" alias="company" />
+        <typeAlias type="hello.LottoModel" alias="lotto" />
     </typeAliases>
 
     <mappers>
         <mapper resource="sqlMap/base.xml" />
+        <mapper resource="sqlMap/lotto.xml" />
     </mappers>
 
 </configuration>

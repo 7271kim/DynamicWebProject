@@ -13,5 +13,7 @@ public interface BaseDao {
     public void settingTodayCompany(CompanyModel company);
     public void updateTodayCompany(CompanyModel company);
     public void updateKospi200(CompanyModel company);
-    
+
+    public List<LottoModel> getLotto(LottoModel lottoModel);
+    public List<LottoModel> getLottoDetail(LottoModel lottoModel);
 }

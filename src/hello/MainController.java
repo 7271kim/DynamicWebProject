@@ -2,12 +2,15 @@ package hello;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.StringJoiner;
 
+import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -15,10 +18,9 @@ import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-
-import com.sun.org.apache.bcel.internal.generic.LUSHR;
 
 @Controller
 public class MainController {
@@ -26,6 +28,158 @@ public class MainController {
     BaseService baseService;
     @Autowired
     AsyncService asyncService;
+    
+    @RequestMapping(value = "/lotto", method = RequestMethod.GET)
+    public String getLotto(Model model, LottoModel lottoModel) {
+        Map<String, String> totalNopick = new HashMap<String, String>();
+        String error    = "";
+        try {
+            String[] noData = lottoModel.getNoPick() != "" ?lottoModel.getNoPick().split(",") : new String[0];
+            for (String item : noData) {
+                totalNopick.put(item, item);
+            }
+            List<LottoModel> lastLotto = new ArrayList<LottoModel>();
+            lastLotto = baseService.getLotto(lottoModel);
+            
+            // 최근 번호 및 최근 번호랑 관련성 높은 번호들 제거
+            if(lastLotto.size() > 0) {
+                String [] lastLottoNumbers = lastLotto.get(0).getNumber().split(" ");
+                for (String numberThis : lastLottoNumbers) {
+                    totalNopick.put(numberThis,numberThis);
+                    LottoModel temp = new LottoModel();
+                    HashMap<String, String> where = new HashMap<>();
+                    where.put("NUMBER", numberThis);
+                    temp.setWhere(where);
+                    List<LottoModel> historys = baseService.getLottoDetail(temp);
+                    for (LottoModel check : historys) {
+                        int value = Integer.parseInt(check.getValue());
+                        String numberTwo = check.getNumber_two();
+                        if( value > 20) {
+                            totalNopick.put(numberTwo,numberTwo);
+                        }
+                    }
+                }
+            }
+            
+            // 과거 특정 횟수동안 나오지 않은 번호 제거
+            Map<String, String> histroryPick = new HashMap<String, String>();
+            for(int index = 1; index <= 45; index++) {
+                String cast = String.valueOf(index);
+                histroryPick.put(cast, cast);
+            }
+            lottoModel.setLimitEnd(Integer.parseInt(lottoModel.getNoDate()));
+            List<LottoModel> historys  = baseService.getLotto(lottoModel);
+            for (LottoModel thisItem : historys) {
+                String [] datas = thisItem.getNumber().split(" ");
+                for (String numberThis : datas) {
+                    histroryPick.remove( numberThis );
+                }
+            }
+            for( String item : histroryPick.keySet() ) {
+                totalNopick.put(item,item);
+            }
+            
+            
+            int totalGetLotto = lottoModel.getTotalGetLotto() ;
+            String[] pickBefore = lottoModel.getPickBefore()!= ""? lottoModel.getPickBefore().split(",") : new String[0];
+            
+            // 구간별 Pick
+            int check_1_10  = lottoModel.getCheckOneStep() == "" ? 0: Integer.parseInt(lottoModel.getCheckOneStep());
+            int check_11_20 = lottoModel.getCheckTwoStep()== "" ? 0: Integer.parseInt(lottoModel.getCheckTwoStep());
+            int check_21_30 = lottoModel.getCheckThreeStep()== "" ? 0: Integer.parseInt(lottoModel.getCheckThreeStep());
+            int check_31_40 = lottoModel.getCheckFourStep()== "" ? 0: Integer.parseInt(lottoModel.getCheckFourStep());
+            int check_41_45 = lottoModel.getCheckFiveStep()== "" ? 0: Integer.parseInt(lottoModel.getCheckFiveStep());
+            
+            ArrayList<String> totalLotto = new ArrayList<String>();
+            
+
+            while(totalLotto.size() < totalGetLotto) {
+                int totoal      = check_1_10+check_11_20+check_21_30+check_31_40+check_41_45;
+                if( pickBefore.length < 7 && totoal < 7) {
+                    ArrayList<Integer> result = new ArrayList<Integer>();
+                    Map<Integer, Integer> lottoNumber = new HashMap<Integer, Integer>();
+                    ArrayList<Integer> check = new ArrayList<Integer>(Arrays.asList(check_1_10,check_11_20,check_21_30,check_31_40,check_41_45));
+                    
+                    for(int index = 1; index <= 45; index++) {
+                        if(!totalNopick.containsKey(String.valueOf(index))) lottoNumber.put(index, index);
+                    }
+                    
+                    for( String before : pickBefore ) {
+                        if(before != "") {
+                            int cast = Integer.parseInt(before);
+                            result.add(cast);
+                            lottoNumber.remove(cast);
+                        }
+                    }
+                    
+                    ArrayList<Integer> checkRange = new ArrayList<Integer>(Arrays.asList(check_1_10,check_11_20,check_21_30,check_31_40,check_41_45));
+                    
+                    // 군집별 작성
+                    for( int item = 0; item < checkRange.size(); item++ ) {
+                        int temp = checkRange.get(item);
+                        
+                        while( temp > 0 ) {
+                            int tempNumber = randomRange(item*10+1, item*10+10); // 군집별 변호 생성
+                            if(lottoNumber.containsKey(tempNumber)) {
+                                lottoNumber.remove(tempNumber);
+                                result.add(tempNumber);
+                                temp--;
+                            }
+                            // 군집 제거 2인경우 0이되었을 경우 해당 군집이 제거되어야 함
+                            if( temp == 0 ) {
+                                for(int removeIndex = 1; removeIndex <= 10; removeIndex++) {
+                                    int index = (tempNumber-1)/10;
+                                    lottoNumber.remove(index*10 + removeIndex);
+                                }
+                            }
+                        }
+                    }
+                    
+                    while( result.size() < 6 ){
+                        int tempNumber = randomRange(1, 45);
+                        if(lottoNumber.containsKey(tempNumber)) {
+                            result.add( tempNumber);
+                            lottoNumber.remove(tempNumber);
+                        }
+                    }
+                    
+                    Collections.sort(result);
+                    totalLotto.add(StringUtils.join(result,"&nbsp;&nbsp;&nbsp;&nbsp;"));
+                } else {
+                    error = "조건이 이상합니다. 조건을 확인해주세요";
+                    System.out.println("조건이 이상합니다. 조건을 확인해주세요");
+                    break;
+                }
+            }
+            Map<Integer, Integer> sortTotalNo = new HashMap<Integer, Integer>();
+            for (String key : totalNopick.keySet()) {
+                int temp = Integer.parseInt(totalNopick.get(key));
+                sortTotalNo.put(temp,temp);
+                
+            }
+            ArrayList<Integer> sortedKeys = new ArrayList<Integer>(sortTotalNo.keySet());
+            Collections.sort(sortedKeys);
+            model.addAttribute("totalLotto", totalLotto);
+            model.addAttribute("lottoModel", lottoModel);
+            model.addAttribute("totalNopick", sortedKeys);
+            model.addAttribute("noPick", lottoModel.getNoPick());
+            model.addAttribute("lastLotto", lastLotto.get(0).getNumber());
+            model.addAttribute("checkOneStep", check_1_10);
+            model.addAttribute("checkTwoStep", check_11_20);
+            model.addAttribute("checkThreeStep", check_21_30);
+            model.addAttribute("checkFourStep", check_31_40);
+            model.addAttribute("checkFiveStep", check_41_45);
+            model.addAttribute("histroryPick", histroryPick);
+            model.addAttribute("noDate", lottoModel.getNoDate());
+            model.addAttribute("pickBefore", lottoModel.getPickBefore());
+            model.addAttribute("totalGetLotto", lottoModel.getTotalGetLotto());
+        } catch (Exception e) {
+            error = e.toString();
+        }
+        model.addAttribute("error", error);
+        
+        return "lotto"; 
+    }
     
     @RequestMapping(value = "/test", method = RequestMethod.GET)
     public String goTest(Model model) {
@@ -36,6 +190,7 @@ public class MainController {
     public String goMain(Model model) {
         KospiModel kospiModel           = new KospiModel();
         CompanyModel companyModel       = new CompanyModel();
+        companyModel.setLimitEnd(100);
         List<KospiModel> kospiValue     = new ArrayList<KospiModel>();
         Map<String, Map<String, Map<String, String>>> companyList = new HashMap<String, Map<String,Map<String,String>>>();
         
@@ -265,5 +420,8 @@ public class MainController {
         }
         
         return bean;
+    }
+    private static int randomRange(int n1, int n2) {
+        return (int) (Math.random() * (n2 - n1 + 1)) + n1;
     }
 }

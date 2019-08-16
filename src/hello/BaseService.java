@@ -15,4 +15,6 @@ public interface BaseService {
     public void updateKospi200(CompanyModel company);
     public void scheduled();
     
+    public List<LottoModel> getLotto(LottoModel lottoModel);
+    public List<LottoModel> getLottoDetail(LottoModel lottoModel);
 }
