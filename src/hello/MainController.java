@@ -242,7 +242,7 @@ public class MainController {
         return "list"; 
     }
     
-    @RequestMapping(value = "/showing", method = RequestMethod.GET)
+    /* @RequestMapping(value = "/showing", method = RequestMethod.GET)
     public String showing( Model model, KospiModel kospiModel ) {
         List<KospiModel> kospiValue = new ArrayList<KospiModel>();
         kospiValue = baseService.getKospi(kospiModel);
@@ -263,7 +263,7 @@ public class MainController {
         model.addAttribute("list", list);
         
         return "companyData"; 
-    }
+    }*/
     
     @RequestMapping(value = "/settings", method = RequestMethod.GET)
     public String settings( Model model, KospiModel kospiModel ) {

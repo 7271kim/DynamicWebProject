@@ -62,7 +62,7 @@ function get_forigin_${company.key}() {
         </c:forEach>
       ]);
     var options = {
-        title: '${kospiKeys[company.key]}',
+        title: '${kospiKeys[company.key]} 외국인 수급량',
         curveType: 'function',
         legend: { position: 'bottom' }
     };
