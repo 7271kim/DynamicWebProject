@@ -223,6 +223,54 @@
                     <warSourceDirectory>WebContent</warSourceDirectory>
                 </configuration>
             </plugin>
+            <!-- 
+              **일반 톰캣 배포
+              1. vi /usr/local/tomcat8/conf/tomcat-users.xml
+              user username에 유저와 아이디 설정 
+              
+              2. org.apache.tomcat.maven
+              mvn \-\-(데쉬데쉬)encrypt-master-password 비밀번호
+              {비번}
+              3.settings-security.xml을 만들기
+              - 비밀번호 나온것 .m2/settings-security.xml 하단 내용 추가
+               <settingsSecurity>
+                  <master>{내용나온것}</master>
+               </settingsSecurity>
+               
+              4. Server암호 받기 
+               mvn (데쉬데쉬)encrypt-password <password>
+               - /.m2/settings.xml 여기 Profile부분에 속성값 추가 
+               -  하단에 적기
+                <server>
+                  <id>gogoD</id>
+                  <username>my_username</username>
+                  <password>my_password</password>
+                </server>
+                
+                - settings.xml에 Profile도 추가 
+               <profile>
+                    <id>deployD</id>
+                    <properties>
+                        <tomcat.deploy.url>url</tomcat.deploy.url>
+                    </properties>
+                </profile>
+              5. POM 아래 플러그인 configuration에 server추가
+              6. 배포 
+              mvn clean tomcat7:deploy -PdeployD
+              -->
+            <plugin>
+               <groupId>org.apache.tomcat.maven</groupId>
+               <artifactId>tomcat7-maven-plugin</artifactId>
+               <version>2.2</version>
+               <configuration>
+                  <server>gogoD</server>
+                  <url>${tomcat.deploy.url}</url>
+                  <!-- <username>git</username>
+                  <password>${password}</password> -->
+               </configuration>
+            </plugin>
         </plugins>
+      
+        
     </build>
 </project>
