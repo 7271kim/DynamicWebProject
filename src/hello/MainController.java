@@ -29,7 +29,7 @@ public class MainController {
     @Autowired
     AsyncService asyncService;
     
-    @RequestMapping(value = "/lotto", method = RequestMethod.GET)
+    @RequestMapping(value = "/lotto.jin", method = RequestMethod.GET)
     public String getLotto(Model model, LottoModel lottoModel) {
         Map<String, String> totalNopick = new HashMap<String, String>();
         String error    = "";
@@ -181,12 +181,12 @@ public class MainController {
         return "lotto"; 
     }
     
-    @RequestMapping(value = "/test", method = RequestMethod.GET)
+    @RequestMapping(value = "/test.jin", method = RequestMethod.GET)
     public String goTest(Model model) {
         return "test"; 
     }
     
-    @RequestMapping(value = "/", method = RequestMethod.GET)
+    @RequestMapping(value = "/company.jin", method = RequestMethod.GET)
     public String goMain(Model model) {
         KospiModel kospiModel           = new KospiModel();
         CompanyModel companyModel       = new CompanyModel();
@@ -265,7 +265,7 @@ public class MainController {
         return "companyData"; 
     }*/
     
-    @RequestMapping(value = "/settings", method = RequestMethod.GET)
+    @RequestMapping(value = "/settings.jin", method = RequestMethod.GET)
     public String settings( Model model, KospiModel kospiModel ) {
         baseService.scheduled();
         return "showing"; 

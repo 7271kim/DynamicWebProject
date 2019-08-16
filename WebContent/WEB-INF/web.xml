@@ -47,7 +47,7 @@ String value = getServletConfig().getInitParameter("name");
     <!-- WebContent 아래 바로 index.jsp 혹은 html이 존재할 시 문제가 되는것은 controller에서value = "/"를 잡지 못한다.! 그러니 주의하기( index.jsp를 지우기) -->
     <servlet-mapping>
         <servlet-name>appServlet</servlet-name>
-        <url-pattern>/</url-pattern>
+        <url-pattern>*.jin</url-pattern>
     </servlet-mapping>
 <!-- 4. log 관련 -->    
     <listener>
@@ -66,7 +66,7 @@ String value = getServletConfig().getInitParameter("name");
     
     <filter-mapping>
         <filter-name>corsFilter</filter-name>
-        <url-pattern>/*</url-pattern>
+        <url-pattern>*</url-pattern>
     </filter-mapping>
     
     <welcome-file-list>
