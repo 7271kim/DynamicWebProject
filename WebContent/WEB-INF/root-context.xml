@@ -1,14 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:tx="http://www.springframework.org/schema/tx"
        xmlns:task="http://www.springframework.org/schema/task"
        xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.1.xsd
         http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
         http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd
         http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.1.xsd
-          http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.1.xsd">
+        http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.1.xsd
+        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.1.xsd">
     <!-- DB정도 암호화 -->
     <!-- 
         1. https://sourceforge.net/projects/jasypt/ 다운로드 후 bin파일  cmd
@@ -25,6 +28,11 @@
     UNIX/LINUX의 경우에는 export ASOG_ENCRYPTION_KEY=키값
     Window의 경우에는 환경변수 ASOG_ENCRYPTION_KEY/키값 설정
     -->
+  
+   <!--
+    ** 다 괜찮은데 : 리눅스에서 properties파일의 ENC를 제대로 못읽음 .java로 세팅
+    ==>확인해보니  vi /etc/init.d/tomcat 여기서 설정해줘야 환경변수 인식 가능.
+     -->
     <bean id="encryptorConfig" class="org.jasypt.encryption.pbe.config.EnvironmentPBEConfig">
       <property name="algorithm" value="PBEWithMD5AndDES" />
       <property name="passwordEnvName" value="ASOG_ENCRYPTION_KEY" />
@@ -40,7 +48,6 @@
         </list>
       </property>
     </bean> 
-    
     <context:property-placeholder location="/WEB-INF/config/jdbc.properties"/>
     <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
         <property name="driverClassName" value="${jdbc.driverClassName}" />
@@ -52,11 +59,18 @@
         <property name="maxWait" value="1000" />
         <property name="defaultAutoCommit" value="true" />
     </bean>
+
     <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
         <property name="dataSource" ref="dataSource" />
         
     </bean>
-    
+   
+    <!--
+    * 만약 JAVA 파일에서 뭔가를 처리해주고 빈 등록을 하고싶을 경우!!!!! 
+    <context:component-scan base-package="hello.ContextDataSource" />
+    <bean class="hello.ContextDataSource"/>
+    -->
+
     <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
         <property name="dataSource" ref="dataSource" />
         <property name="configLocation" value="classpath:sqlMap/mybatis_config.xml" />
