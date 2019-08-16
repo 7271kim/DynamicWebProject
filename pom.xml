@@ -194,11 +194,11 @@
         </dependency> -->
     </dependencies>
     
-    <!-- 배포환경 구성 -->
+    <!-- 배포환경구성 -->
     <build>
         <sourceDirectory>src</sourceDirectory>
-        <resources>         
-            <resource>      
+        <resources>
+            <resource>
                 <directory>src</directory>
                 <filtering>true</filtering>
                 <excludes>
@@ -213,7 +213,7 @@
                 <configuration>
                     <source>${jdk.level}</source>
                     <target>${jdk.level}</target>
-                    <!-- <encoding>UTF-8</encoding> -->
+                    <encoding>UTF-8</encoding>
                 </configuration>
             </plugin>
             <plugin>
