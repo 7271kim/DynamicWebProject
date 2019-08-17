@@ -118,8 +118,8 @@
     
     <insert id="settingTodayCompany" parameterType="company">
         INSERT INTO tomcat_company_today
-                (COMPANYCODE,DATE,TODAYPRICE,TODAYUPDOWN,TODAYRATE) 
-        VALUES ( #{companyCode},#{date},#{todayPrice},#{todayUpdown},#{todayRate} );
+                (COMPANYCODE,DATE,TODAYPRICE,TODAYUPDOWN,TODAYRATE,FORIGIN,forignPersent) 
+        VALUES ( #{companyCode},#{date},#{todayPrice},#{todayUpdown},#{todayRate},#{forigin},#{forignPersent} );
     </insert>
     
     <update id="updateTodayCompany" parameterType="company">

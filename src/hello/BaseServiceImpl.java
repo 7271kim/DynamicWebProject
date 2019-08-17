@@ -1,11 +1,7 @@
 package hello;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -132,7 +128,8 @@ public class BaseServiceImpl implements BaseService {
                     String forignPersent = todayKospiRow.select("td").get(8).text();
                     CompanyModel thisCompany = new CompanyModel(companyName, companyCode, todayDate, todayPrice, todayUpdown, todayRate, forigin, forignPersent);
                     CompanyModel temp = getTodayCompanyOne(companyCode, todayDate);
-                    if( temp.equals(null)) {
+                    if( temp.isEmty() ) {
+                        System.out.println(thisCompany.getCompanyName()=="");
                         settingTodayCompany(thisCompany);
                     }else {
                         HashMap<String, String> where = new HashMap<>();
@@ -150,22 +147,24 @@ public class BaseServiceImpl implements BaseService {
     
    private void settingsKospiToday() {
         try {
-            String urlKospi = "https://finance.naver.com/sise/sise_index_day.nhn?code=KOSPI&page=1";
-            Document doc;
-            doc = Jsoup.connect(urlKospi).get();
-            Element table           = doc.getElementsByTag("table").get(0);
-            Element todayKospiRow   = table.select("tbody tr").get(2);
-            String today            = todayKospiRow.getElementsByTag("td").get(0).text();
-            String kospi            = todayKospiRow.getElementsByTag("td").get(1).text();
-            KospiModel kospiToday = new KospiModel(today, kospi);
-            KospiModel temp = getOne(today);
-            if( temp.getDate() == null ) {
-                settingKospi(kospiToday);
-            } else {
-                HashMap<String, String> where = new HashMap<>();
-                where.put("DATE",today);
-                kospiToday.setWhere(where);
-                kospiUpdate(kospiToday);
+            for(int index = 2; index <= 4; index++){
+                String urlKospi = "https://finance.naver.com/sise/sise_index_day.nhn?code=KOSPI&page=1";
+                Document doc;
+                doc = Jsoup.connect(urlKospi).get();
+                Element table           = doc.getElementsByTag("table").get(0);
+                Element todayKospiRow   = table.select("tbody tr").get(index);
+                String today            = todayKospiRow.getElementsByTag("td").get(0).text();
+                String kospi            = todayKospiRow.getElementsByTag("td").get(1).text();
+                KospiModel kospiToday = new KospiModel(today, kospi);
+                KospiModel temp = getOne(today);
+                if( temp.getDate() == null ) {
+                    settingKospi(kospiToday);
+                } else {
+                    HashMap<String, String> where = new HashMap<>();
+                    where.put("DATE",today);
+                    kospiToday.setWhere(where);
+                    kospiUpdate(kospiToday);
+                }
             }
         } catch (Exception e) {
         }

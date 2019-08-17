@@ -41,6 +41,10 @@ public class CompanyModel {
         this.forignPersent = forignPersent;
     }
     
+    public Boolean isEmty() {
+        return companyName == "" || companyName == null;
+    }
+    
     // 동적 SQL을 위한 필드
     private HashMap<String, String> where;
     private HashMap<String, String> whereNot;
