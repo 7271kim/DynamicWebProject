@@ -26,7 +26,7 @@ ${histroryPickItem.key}
 ${noPickItem}
 </c:forEach >
 </p>
-<form action="lotto.do">
+<form action="lotto.jin">
 <h3 class='join-title'> <label for="checkOneStep">0-10번대 뽑을 갯수</label> <input type="number" id="checkOneStep" name="checkOneStep" value="${checkOneStep}"></h3>
 <h3 class='join-title'> <label for="checkTwoStep">11-20번대 뽑을 갯수</label> <input type="number" id="checkTwoStep" name="checkTwoStep" value="${checkTwoStep}"></h3>
 <h3 class='join-title'> <label for="checkThreeStep">21-30번대 뽑을 갯수</label> <input type="number" id="checkThreeStep" name="checkThreeStep" value="${checkThreeStep}"></h3>
