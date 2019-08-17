@@ -34,6 +34,7 @@ ${noPickItem}
 <h3 class='join-title'> <label for="checkFiveStep">41-45번대 뽑을 갯수</label> <input type="number" id="checkFiveStep" name="checkFiveStep" value="${checkFiveStep}"></h3>
 <h3 class='join-title'> <label for="noPick">뽑지 않을 번호 (",로 구분해주세요")</label> <input type="text" id="noPick" name="noPick" value="${noPick}"></h3>
 <h3 class='join-title'> <label for="pickBefore">미리 뽑아놓을 번호(",로 구분해주세요")</label> <input type="text" id="pickBefore" name="pickBefore" value="${pickBefore}"></h3>
+<h3 class='join-title'> <label for="noDate">과거 N 동안 나오지 않은 번호 5이하 일시 적용안함</label> <input type="number" id="noDate" name="noDate" value="${noDate}"></h3>
 <h3 class='join-title'> <label for="totalGetLotto">구매 횟수</label> <input type="number" id="totalGetLotto" name="totalGetLotto" value="${totalGetLotto}"></h3>
 <input type="submit" value="로또번호 뽑기" >
 </form>

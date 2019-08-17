@@ -62,21 +62,24 @@ public class MainController {
             }
             
             // 과거 특정 횟수동안 나오지 않은 번호 제거
+            int getNodate = Integer.parseInt(lottoModel.getNoDate());
             Map<String, String> histroryPick = new HashMap<String, String>();
-            for(int index = 1; index <= 45; index++) {
-                String cast = String.valueOf(index);
-                histroryPick.put(cast, cast);
-            }
-            lottoModel.setLimitEnd(Integer.parseInt(lottoModel.getNoDate()));
-            List<LottoModel> historys  = baseService.getLotto(lottoModel);
-            for (LottoModel thisItem : historys) {
-                String [] datas = thisItem.getNumber().split(" ");
-                for (String numberThis : datas) {
-                    histroryPick.remove( numberThis );
+            if(getNodate > 5) {
+                for(int index = 1; index <= 45; index++) {
+                    String cast = String.valueOf(index);
+                    histroryPick.put(cast, cast);
                 }
-            }
-            for( String item : histroryPick.keySet() ) {
-                totalNopick.put(item,item);
+                lottoModel.setLimitEnd(Integer.parseInt(lottoModel.getNoDate()));
+                List<LottoModel> historys  = baseService.getLotto(lottoModel);
+                for (LottoModel thisItem : historys) {
+                    String [] datas = thisItem.getNumber().split(" ");
+                    for (String numberThis : datas) {
+                        histroryPick.remove( numberThis );
+                    }
+                }
+                for( String item : histroryPick.keySet() ) {
+                    totalNopick.put(item,item);
+                }
             }
             
             
