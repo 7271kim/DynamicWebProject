@@ -95,6 +95,7 @@ ${company.forignPersent}<br/>
 </c:forEach> --%>
 
 </body>
+월 - 금 22시 자동 데이터 수집되도록 설계
 <div id="kospi" style="width: 100%; height: 500px"></div>
 <c:forEach var="key" items="${keysSort }">
 <div id="${key}" style="width:  100%; height: 500px"></div>
