@@ -257,6 +257,8 @@
               5. POM 아래 플러그인 configuration에 server추가
               6. 배포 
               mvn clean tomcat7:deploy -PdeployD
+              (재배포시)
+              mvn clean tomcat7:redeploy -PdeployD
               -->
             <plugin>
                <groupId>org.apache.tomcat.maven</groupId>
