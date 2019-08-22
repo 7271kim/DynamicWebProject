@@ -14,11 +14,23 @@ public class CompanyModel {
     private String todayRate;
     private String forigin;
     private String forignPersent;
+    private String tradingVolume;
     
     public CompanyModel() {}
     public CompanyModel(String companyName,String companyCode) {
         this.companyCode = companyCode;
         this.companyName = companyName;
+    }
+    public CompanyModel(String companyName,String companyCode,String date,String todayPrice,String todayUpdown,String todayRate,String forigin,String forignPersent, String tradingVolume) {
+        this.companyCode = companyCode;
+        this.companyName = companyName;
+        this.date = date;
+        this.todayPrice = todayPrice;
+        this.todayUpdown = todayUpdown;
+        this.todayRate = todayRate;
+        this.forigin = forigin;
+        this.forignPersent = forignPersent;
+        this.tradingVolume = tradingVolume;
     }
     
     public CompanyModel(String companyName,String companyCode,String date,String todayPrice,String todayUpdown,String todayRate) {

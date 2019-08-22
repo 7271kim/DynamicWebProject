@@ -85,7 +85,7 @@
     </select>
     
     <select id="getTodayCompany" parameterType="company" resultType="company" >
-        SELECT SEQ, COMPANYNAME, company.COMPANYCODE COMPANYCODE, DATE, TODAYPRICE, TODAYUPDOWN, TODAYRATE, FORIGIN, FORIGNPERSENT 
+        SELECT SEQ, COMPANYNAME, company.COMPANYCODE COMPANYCODE, DATE, TODAYPRICE, TODAYUPDOWN, TODAYRATE, FORIGIN, FORIGNPERSENT, TRADINGVOLUME 
         FROM tomcat_company_today company JOIN tomcat_company kospi200 ON company.COMPANYCODE = kospi200.COMPANYCODE
         WHERE 1 = 1
         <if test="where != null and where != ''">
@@ -118,8 +118,8 @@
     
     <insert id="settingTodayCompany" parameterType="company">
         INSERT INTO tomcat_company_today
-                (COMPANYCODE,DATE,TODAYPRICE,TODAYUPDOWN,TODAYRATE,FORIGIN,forignPersent) 
-        VALUES ( #{companyCode},#{date},#{todayPrice},#{todayUpdown},#{todayRate},#{forigin},#{forignPersent} );
+                (COMPANYCODE,DATE,TODAYPRICE,TODAYUPDOWN,TODAYRATE,FORIGIN,forignPersent, TRADINGVOLUME) 
+        VALUES ( #{companyCode},#{date},#{todayPrice},#{todayUpdown},#{todayRate},#{forigin},#{forignPersent}, #{tradingVolume} );
     </insert>
     
     <update id="updateTodayCompany" parameterType="company">
@@ -132,6 +132,7 @@
                <if test="todayRate != null and todayRate != ''">TODAYRATE=#{todayRate},</if>
                <if test="forigin != null and forigin != ''">FORIGIN=#{forigin},</if>
                <if test="forignPersent != null and forignPersent != ''">FORIGNPERSENT=#{forignPersent},</if>
+               <if test="tradingVolume != null and tradingVolume != ''">TRADINGVOLUME=#{tradingVolume},</if>
             </trim>
             WHERE 1 = 1
             <if test="where != null and where != ''">

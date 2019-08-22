@@ -118,15 +118,16 @@ public class BaseServiceImpl implements BaseService {
                 doc = Jsoup.connect(url).get();
                 if(doc.select(".inner_sub table") != null) {
                     Element table                     = doc.select(".inner_sub table").get(1);
-                    Element todayKospiRow     = table.select("tbody tr").get(3);
-                    String todayDate  = todayKospiRow.select("td").get(0).text();
-                    String todayPrice = todayKospiRow.select("td").get(1).text();
-                    String number = todayKospiRow.select("td").get(2).text().replaceAll(",", "");
-                    String todayUpdown = todayKospiRow.select("td").get(2).hasAttr("red02") ? number : "-"+number;
-                    String todayRate         = todayKospiRow.select("td").get(3).text().replaceAll("%", "");
+                    Element todayKospiRow   = table.select("tbody tr").get(3);
+                    String todayDate        = todayKospiRow.select("td").get(0).text();
+                    String todayPrice       = todayKospiRow.select("td").get(1).text();
+                    String number           = todayKospiRow.select("td").get(2).text().replaceAll(",", "");
+                    String todayUpdown      = todayKospiRow.select("td").get(2).hasAttr("red02") ? number : "-"+number;
+                    String todayRate        = todayKospiRow.select("td").get(3).text().replaceAll("%", "");
+                    String tradingVolume    = todayKospiRow.select("td").get(4).text().replaceAll(",", "");
                     String forigin = todayKospiRow.select("td").get(6).text();
                     String forignPersent = todayKospiRow.select("td").get(8).text();
-                    CompanyModel thisCompany = new CompanyModel(companyName, companyCode, todayDate, todayPrice, todayUpdown, todayRate, forigin, forignPersent);
+                    CompanyModel thisCompany = new CompanyModel(companyName, companyCode, todayDate, todayPrice, todayUpdown, todayRate, forigin, forignPersent,tradingVolume);
                     CompanyModel temp = getTodayCompanyOne(companyCode, todayDate);
                     if( temp.isEmty() ) {
                         System.out.println(thisCompany.getCompanyName()=="");
