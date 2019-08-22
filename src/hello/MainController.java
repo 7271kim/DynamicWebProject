@@ -219,6 +219,7 @@ public class MainController {
                 companyData.put("companyName", tempCompany.getCompanyName());
                 companyData.put("todayPrice", tempCompany.getTodayPrice());
                 companyData.put("forigin", tempCompany.getForigin());
+                companyData.put("tradingVolume", tempCompany.getTradingVolume());
                 companys.put(tempCompany.getDate(),companyData);
             }
             companyList.put(companyCode, companys);
