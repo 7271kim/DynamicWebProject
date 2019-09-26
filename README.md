@@ -12,27 +12,27 @@ WEB관련
 ###### 갑작스런 에러 : 3은(는) 3바이트 UTF-8 시퀀스에 대해 부적합한 바이트입니다. 혹은 Invalid byte 3 of 3-byte UTF-8 sequence 에러 발생시 
 ###### *** window : eclipse.ini >> -Dfile.encoding=UTF-8이거 추가한 상태 » 프로젝트 클린
 ###### ***Linux   : tomcat/bin/setenv.sh 생성 후 export JAVA_OPTS=”$JAVA_OPTS -Dfile.encoding=UTF-8” 이것 추가
-
+<br/>
 ##### 4. 배포 환경 구성 
 ##### {user}/.m2/settings-security.xml 하단 내용 추가
-<settingsSecurity>
-    <master>{masterKey}</master>
-</settingsSecurity>
-               
+&lt;settingsSecurity> <br/>
+    &lt;master>{masterKey}&lt;/master><br/>
+&lt;/settingsSecurity>
+<br/>
 ##### {user}/.m2/settings.xml 여기 Profile부분에 속성값 추가
-&lt;server>
-  &lt;id>gogoD&lt;/id>
-  &lt;username>my_username&lt;/username>
-  &lt;password>my_password&lt;/password>
-&lt;/server>
-
-&lt;profile>
-    &lt;id>deployD&lt;/id>
-    &lt;properties>
-        &lt;tomcat.deploy.url>url&lt;/tomcat.deploy.url>
-    &lt;/properties>
+&lt;server><br/>
+  &lt;id>gogoD&lt;/id><br/>
+  &lt;username>my_username&lt;/username><br/>
+  &lt;password>my_password&lt;/password><br/>
+&lt;/server><br/>
+<br/>
+&lt;profile><br/>
+    &lt;id>deployD&lt;/id><br/>
+    &lt;properties><br/>
+        &lt;tomcat.deploy.url>url&lt;/tomcat.deploy.url><br/>
+    &lt;/properties><br/>
 &lt;/profile>
-
+<br/>
 ##### 5. 배포
 #####mvn clean tomcat7:deploy -PdeployD
 #####mvn clean tomcat7:redeploy -PdeployD
