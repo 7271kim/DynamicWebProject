@@ -34,6 +34,6 @@ WEB관련
 &lt;/profile>
 
 ##### 5. 배포
-mvn clean tomcat7:deploy -PdeployD
-mvn clean tomcat7:redeploy -PdeployD
+#####mvn clean tomcat7:deploy -PdeployD
+#####mvn clean tomcat7:redeploy -PdeployD
 (재배포시 - 재실행 필요없음)
