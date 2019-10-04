@@ -207,6 +207,14 @@
             </resource>
         </resources>
         <plugins>
+        <!-- 
+        * 플러그인 명명 규칙 mvn groupId:artifactId:version:goal
+         : 저장소에 있는 가장 최신 버전의 플러그인사용시 version 생략가능
+         : artifactId가 'maven-$name-plugin' 과 '$name-maven-plugin' 규칠을 따른다면 groupId:$name:goal 형식으로 실행할 수 있다.
+         : groupId 목록을 settings.xml에서 관리한다면 생략가능 
+         : org.apache.maven.plugins와 org.codehaus.mojo은 기본 groupId이라 생략 가능
+         
+         -->
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.8.0</version>
