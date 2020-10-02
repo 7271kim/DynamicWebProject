@@ -44,10 +44,11 @@
       <constructor-arg ref="encryptor" />
       <property name="locations">
         <list>
-          <value>/WEB-INF/config/jdbc.properties</value>
+          <value>/WEB-INF/config/jdbc.dev.properties</value>
         </list>
       </property>
     </bean> 
+    <!-- jdbc:log4jdbc:mysql://localhost:3306/honbabzone -->
     <context:property-placeholder location="/WEB-INF/config/jdbc.properties"/>
     <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
         <property name="driverClassName" value="${jdbc.driverClassName}" />

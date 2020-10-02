@@ -29,6 +29,15 @@ public class MainController {
     @Autowired
     AsyncService asyncService;
     
+    
+    @RequestMapping(value = "/lottoTotalUpdate.jin", method = RequestMethod.GET)
+    public String getLottoUpdate(Model model, LottoModel lottoModel) {
+        
+        
+        return "lottoUpdate"; 
+    }
+    
+    
     @RequestMapping(value = "/lotto.jin", method = RequestMethod.GET)
     public String getLotto(Model model, LottoModel lottoModel) {
         Map<String, String> totalNopick = new HashMap<String, String>();

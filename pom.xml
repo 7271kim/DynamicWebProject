@@ -16,11 +16,13 @@
     -->
     
      <!-- 2. 프로젝트에서 사용할 Maven 글로벌 변수    -->
+     <!-- 2020.10.02 최신은 5.1.0  -->
+     <!-- gson이 톰캣 1.8, java 1.8에 돌아감... -->
     <properties>
         <java.version>1.8.0</java.version>
         <jdk.level>1.8</jdk.level>
-        <org.springframework-version>4.1.1.RELEASE</org.springframework-version>
-        <org.slf4j-version>1.7.26</org.slf4j-version>
+        <org.springframework-version>5.1.0.RELEASE</org.springframework-version>
+        <log4j2.version>2.12.1</log4j2.version>
     </properties>
     
     <!-- 3. 저장소 설정 -->
@@ -120,7 +122,7 @@
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
-            <version>8.0.16</version>
+            <version>8.0.21</version>
         </dependency>
         <dependency>
             <groupId>org.mybatis</groupId>
@@ -147,22 +149,26 @@
         
         <!-- log관련 -->
         <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-log4j12</artifactId>
-            <version>${org.slf4j-version}</version>
-            <scope>runtime</scope>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
+            <version>${log4j2.version}</version>
         </dependency>
         <dependency>
-            <groupId>log4j</groupId>
-            <artifactId>log4j</artifactId>
-            <version>1.2.17</version>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-api</artifactId>
+            <version>${log4j2.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-web</artifactId>
+            <version>${log4j2.version}</version>
         </dependency>
         
-        <!-- JSOUP 관련 -->
+        <!-- 내 라이브러리 -->
         <dependency>
-            <groupId>org.jsoup</groupId>
-            <artifactId>jsoup</artifactId>
-            <version>1.11.3</version>
+            <groupId>com.seokjinkim</groupId>
+            <artifactId>makelibrary</artifactId>
+            <version>0.0.2</version>
         </dependency>
         
         <!-- 자동 Getter Setter -->
@@ -170,11 +176,11 @@
           Download된 jar파일 위치로 가서 해당 jar 실행.
            >> 이클립스 겁색 >> 지금사용하고 있는 이클립스.exe 찾기 >> 이클립스 재실행
         -->
-       <dependency> 
+      <!--  <dependency> 
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <version>1.16.16</version>
-        </dependency>
+        </dependency> -->
         
         <!-- 스케쥴러 사용을 위한 pom -->
         <!-- <dependency>
