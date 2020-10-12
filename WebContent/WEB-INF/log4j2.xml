@@ -111,12 +111,12 @@
         </Logger>
         
         <Logger name="jdbc.connection" additivity="false">
-            <AppenderRef ref="console" level="INFO"/>
+            <AppenderRef ref="console" level="ERROR"/>
             <AppenderRef ref="add_err_file" level="ERROR"/>
         </Logger>
-        
+        <!--  ResultSet을 제외한 모든 JDBC 호출 정보를 로그로 남긴다. 많은 양의 로그가 생성되므로 특별히  JDBC 문제를 추적해야 할 필요가 있는 경우를 제외하고는 사용을 권장하지 않는다. -->
         <Logger name="jdbc.audit" additivity="false">
-            <AppenderRef ref="console" level="INFO" />
+            <AppenderRef ref="console" level="ERROR" />
             <AppenderRef ref="add_err_file" level="ERROR"/>
         </Logger>
         
@@ -125,18 +125,21 @@
             <AppenderRef ref="add_err_file" level="ERROR"/>
         </Logger>
         
+        <!-- SQL문과 해당 SQL을 실행시키는데 수행된 시간 정보(milliseconds)를 포함한다. -->
         <Logger name="jdbc.sqltiming" additivity="false">
-           <AppenderRef ref="console" level="INFO" />
+           <AppenderRef ref="console" level="ERROR" />
            <AppenderRef ref="add_err_file" level="ERROR"/>
         </Logger>
         
+        <!-- ResultSet을 포함한 모든 JDBC 호출 정보를 로그로 남기므로 매우 방대한 양의 로그가 생성된다.  -->
         <Logger name="jdbc.resultset" additivity="false">
-             <AppenderRef ref="console" level="INFO" />
+             <AppenderRef ref="console" level="ERROR" />
              <AppenderRef ref="add_err_file" level="ERROR"/>
         </Logger>
         
+        <!--  SQL 결과 조회된 데이터의 table을 로그로 남긴다. -->
         <Logger name="jdbc.resultsettable" additivity="false">
-             <AppenderRef ref="console" level="INFO" />
+             <AppenderRef ref="console" level="ERROR" />
              <AppenderRef ref="add_err_file" level="ERROR"/>
         </Logger>
     </Loggers>
