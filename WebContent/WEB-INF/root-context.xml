@@ -39,15 +39,17 @@
     </bean>
    <bean id="encryptor" class="org.jasypt.encryption.pbe.StandardPBEStringEncryptor">
       <property name="config" ref="encryptorConfig" />
-    </bean>    
+    </bean>
     <bean class="org.jasypt.spring31.properties.EncryptablePropertyPlaceholderConfigurer">
       <constructor-arg ref="encryptor" />
       <property name="locations">
         <list>
-          <value>/WEB-INF/config/jdbc.dev.properties</value>
+          <value>/WEB-INF/config/jdbc.properties</value>
         </list>
       </property>
-    </bean> 
+    </bean>
+    <!-- 디코딩 끝 -->
+     
     <!-- jdbc:log4jdbc:mysql://localhost:3306/honbabzone -->
     <context:property-placeholder location="/WEB-INF/config/jdbc.properties"/>
     <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
