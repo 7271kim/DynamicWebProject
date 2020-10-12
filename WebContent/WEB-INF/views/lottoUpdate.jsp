@@ -13,7 +13,7 @@
 <link rel="stylesheet" href="css/ca_fr22.css" type="text/css">
 </head>
 <body>
-<h1>로또 업데이트가 완료되었습니다.</h1>
+<h1>${result }</h1>
 
 </body>
 </html>

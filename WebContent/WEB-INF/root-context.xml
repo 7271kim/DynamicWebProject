@@ -71,7 +71,6 @@
     <context:component-scan base-package="hello.ContextDataSource" />
     <bean class="hello.ContextDataSource"/>
     -->
-
     <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
         <property name="dataSource" ref="dataSource" />
         <property name="configLocation" value="classpath:sqlMap/mybatis_config.xml" />
@@ -107,5 +106,5 @@
     </bean> -->
     
     <!-- 필터 테스트 -->
-    <bean id="corsFilter" class="hello.FilterChain" />
+    <bean id="corsFilter" class="services.util.FilterChain" />
 </beans>

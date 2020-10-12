@@ -1,18 +1,22 @@
-package hello;
+package dao.impl;
 
 import java.util.List;
 
 import org.apache.ibatis.session.SqlSession;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+
+import dao.BaseDao;
+import model.CompanyModel;
+import model.KospiModel;
 
 @Repository
 public class BaseDaoImpl implements BaseDao {
 
     
-    private static Logger logger = LoggerFactory.getLogger(BaseDaoImpl.class);
+    private static Logger LOGGER = LogManager.getLogger(BaseDaoImpl.class);
     
     @Autowired
     private SqlSession sqlSession;
@@ -62,16 +66,6 @@ public class BaseDaoImpl implements BaseDao {
     @Override
     public void updateKospi200(CompanyModel company) {
         sqlSession.update("BASE.updateKospi200",company);
-    }
-
-    @Override
-    public List<LottoModel> getLotto(LottoModel lottoModel) {
-        return sqlSession.selectList("LOTTO.getLotto",lottoModel);
-    }
-
-    @Override
-    public List<LottoModel> getLottoDetail(LottoModel lottoModel) {
-        return sqlSession.selectList("LOTTO.getLottoDetail",lottoModel);
     }
   
 }

@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- 초기 기본 설정 -->
+<!-- 구버전 -->
+<!-- 
+<!DOCTYPE log4j:configuration SYSTEM "http://logging.apache.org/log4j/1.2/apidocs/org/apache/log4j/xml/doc-files/log4j.dtd">
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/" debug="false">
+    <appender name="console" class="org.apache.log4j.ConsoleAppender">
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%d{HHmmss.SSS} [%-5p] %c{1}.%M():%L %m%n" />
+        </layout>
+    </appender>
+    <logger name="jdbc.connection" additivity="false">
+        <level value="WARN" />
+        <appender-ref ref="console" />
+    </logger>
+    <logger name="jdbc.audit" additivity="false">
+        <level value="WARN" />
+        <appender-ref ref="console" />
+    </logger>
+    <logger name="jdbc.sqlonly" additivity="false">
+        <level value="WARN" />
+        <appender-ref ref="console" />
+    </logger>
+    <logger name="jdbc.sqltiming" additivity="false">
+        <level value="INFO" />
+        <appender-ref ref="console" />
+    </logger>
+    <logger name="jdbc.resultset" additivity="false">
+        <level value="WARN" />
+        <appender-ref ref="console" />
+    </logger>
+    <logger name="jdbc.resultsettable" additivity="false">
+        <level value="WARN" />
+        <appender-ref ref="console" />
+    </logger>
+    
+    Application Loggers
+    hello pacckage 이하  INFO 레벨 찍어주겠다. 연결은 console
+    <logger name="hello">
+        <level value="INFO" />
+        <appender-ref ref="console" />
+    </logger>
+     
+     "Controller" pacckage 이하 INFO 레벨 찍어주겠다.
+     <logger name="Controller">
+        <level value="INFO" />
+        <appender-ref ref="console" />
+    </logger>
+    
+    Spring Frame work 패키지들의 WARN 이상의 디버깅 하겠다.
+   <logger name="org.springframework">
+        <level value="WARN" />
+        <appender-ref ref="console" />
+    </logger>
+
+    Root Logger
+    기본 출력 설정 DEBUG모드 : 디버그 관련 저장될 위치 
+    <root>
+        <priority value="DEBUG" />
+        <appender-ref ref="console" />
+    </root>
+    
+</log4j:configuration>
+
+ -->
+
+<Configuration status="INFO" name="myLogger" packages="">
+    <Properties>
+        <Property name="logName">dynamic-web</Property>
+        <Property name="layoutPattern">%style{%d{yyyy/MM/dd HH:mm:ss,SSS}}{cyan} %highlight{[%-5p]}{FATAL=bg_red, ERROR=red, INFO=green, DEBUG=blue}  [%C] %style{[%t]}{yellow}- %m%n -</Property>
+    </Properties>
+    
+    <Appenders>
+        <Console name="console">
+            <PatternLayout pattern="${layoutPattern}"/>
+        </Console>
+        <!-- 1일마다  D:/log/${logName}_error.log 파일이 D:/log/${logName}/%d{yyyy-MM-dd}/error.log 경로로 이전된다.
+            %d{yyyy-MM-dd-hh-mm} >> 1(interval) 분마다
+            %d{yyyy-MM-dd-hh} >> 매 1(interval) 시간마다
+            %d{yyyy-MM-dd} >> 하루마다 (interval)
+        -->
+        <RollingFile name="add_err_file" fileName="D:/log/${logName}_error.log" filePattern="D:/log/${logName}/%d{yyyy-MM-dd}/${logName}_error.log">
+            <PatternLayout pattern="${layoutPattern}"/>
+            <Policies>
+                <SizeBasedTriggeringPolicy size="200KB"/>
+                <TimeBasedTriggeringPolicy interval="1"/>
+            </Policies>
+            <DefaultRolloverStrategy max="10" fileIndex="min"/>
+        </RollingFile>
+    </Appenders>
+    
+    <Loggers>
+        <Root level="INFO" additivity="false">
+            <AppenderRef ref="console"/>
+        </Root>
+        
+        <Logger name="org.springframework" additivity="false">
+            <AppenderRef ref="console" level="WARN" />
+            <AppenderRef ref="add_err_file" level="ERROR" />
+        </Logger>
+        
+        <Logger name="hello" additivity="false">
+            <AppenderRef ref="console" level="INFO" />
+            <AppenderRef ref="add_err_file" level="ERROR" />
+        </Logger>
+        
+        <Logger name="controller" additivity="false">
+            <appender-ref  ref="console" level="INFO" />
+            <appender-ref  ref="add_err_file" level="ERROR" />
+        </Logger>
+        
+        <Logger name="jdbc.connection" additivity="false">
+            <AppenderRef ref="console" level="INFO"/>
+            <AppenderRef ref="add_err_file" level="ERROR"/>
+        </Logger>
+        
+        <Logger name="jdbc.audit" additivity="false">
+            <AppenderRef ref="console" level="INFO" />
+            <AppenderRef ref="add_err_file" level="ERROR"/>
+        </Logger>
+        
+        <Logger name="jdbc.sqlonly" additivity="false">
+            <AppenderRef ref="console" level="INFO" />
+            <AppenderRef ref="add_err_file" level="ERROR"/>
+        </Logger>
+        
+        <Logger name="jdbc.sqltiming" additivity="false">
+           <AppenderRef ref="console" level="INFO" />
+           <AppenderRef ref="add_err_file" level="ERROR"/>
+        </Logger>
+        
+        <Logger name="jdbc.resultset" additivity="false">
+             <AppenderRef ref="console" level="INFO" />
+             <AppenderRef ref="add_err_file" level="ERROR"/>
+        </Logger>
+        
+        <Logger name="jdbc.resultsettable" additivity="false">
+             <AppenderRef ref="console" level="INFO" />
+             <AppenderRef ref="add_err_file" level="ERROR"/>
+        </Logger>
+    </Loggers>
+</Configuration>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

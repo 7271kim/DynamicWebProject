@@ -1,4 +1,4 @@
-package hello;
+package model;
 
 import java.util.HashMap;
 
@@ -12,6 +12,7 @@ public class LottoModel {
     private String checkThreeStep  = "";
     private String checkFourStep   = "";
     private String checkFiveStep   = "";
+    private String sum;
     private String date;
     private String number;
     private String number_two;
@@ -25,6 +26,13 @@ public class LottoModel {
     // 추후 가지고 오는 list 개수 설정위해 
     private int limitStart = 0;
     private int limitEnd;
+    
+    public String getSum() {
+        return sum;
+    }
+    public void setSum(String sum) {
+        this.sum = sum;
+    }
     public String getNoDate() {
         return noDate;
     }

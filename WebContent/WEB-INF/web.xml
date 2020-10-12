@@ -56,13 +56,12 @@ String value = getServletConfig().getInitParameter("name");
     </servlet-mapping>
     
     <!-- 4. log 관련 -->    
-    <listener>
-        <listener-class>org.apache.logging.log4j.web.Log4jServletContextListener</listener-class>
-    </listener>
+    <!-- log4j2부터는 경로를 classpath 하위 log4j2.xml 파일을 넣어야 자동으로 읽고 설정 가능하다. 임의의 위치로 파일 몇 및 위치 변경 불가능으로 나옴
     <context-param>
         <param-name>log4jConfigLocation</param-name>
         <param-value>/WEB-INF/log4j.xml</param-value>
     </context-param>
+    -->
 
     
     <!-- 5.혹 커스텀 필터 관련 -->

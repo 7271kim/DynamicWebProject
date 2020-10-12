@@ -27,16 +27,23 @@
     </beans:bean>
     
     <!-- @Async를 통해 비동기를 사용할 경우 -->
-    <beans:bean id="asyncService" class="hello.AsyncService"></beans:bean>
+    <beans:bean id="asyncService" class="services.util.AsyncService"></beans:bean>
     <task:executor id="asyncExecutor" pool-size="100-1000" queue-capacity="1000"  rejection-policy="ABORT" />
     <task:annotation-driven executor="asyncExecutor" />
     
     
     <!-- 컨트롤러 설정 -->
     <context:component-scan base-package="hello" />
+    <context:component-scan base-package="controller" />
     
     <!-- sql관련-->   
     <context:component-scan base-package="sqlMap" />
+    
+    <!-- Services 관련  -->
+    <context:component-scan base-package="services" />
+    
+    <!-- Dao 관련  -->
+    <context:component-scan base-package="dao" />
     
     <!-- service, DAO   -->
     <!-- <context:component-scan base-package="com.honbabzone.tomcat.mem.dao" />

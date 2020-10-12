@@ -1,4 +1,4 @@
-package hello;
+package services.impl;
 
 import java.util.HashMap;
 import java.util.List;
@@ -9,6 +9,12 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import dao.BaseDao;
+import model.CompanyModel;
+import model.KospiModel;
+import model.LottoModel;
+import services.BaseService;
 
 @Service
 public class BaseServiceImpl implements BaseService {
@@ -59,16 +65,6 @@ public class BaseServiceImpl implements BaseService {
     public void updateKospi200(CompanyModel company) {
         baseDao.updateKospi200(company);
     }
-
-    @Override
-    public List<LottoModel> getLotto(LottoModel lottoModel) {
-        return baseDao.getLotto(lottoModel);
-    }
-    @Override
-    public List<LottoModel> getLottoDetail(LottoModel lottoModel) {
-        return baseDao.getLottoDetail(lottoModel);
-    }
-    
 
     @org.springframework.scheduling.annotation.Scheduled(cron="0 0 22 * * MON-FRI")
     @Override

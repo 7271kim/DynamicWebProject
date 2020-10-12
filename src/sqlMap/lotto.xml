@@ -26,6 +26,93 @@
            LIMIT #{limitStart}, #{limitEnd}
         </if>
     </select>
+    
+    <insert id="insertLotto" parameterType="lotto">
+        INSERT INTO lotto_data
+                ( DATE, NUMBER ) 
+        VALUES ( #{date},#{number} );
+    </insert>
+    
+    <update id="updateLotto" parameterType="lotto">
+        UPDATE lotto_data
+            <trim prefix="SET" suffixOverrides=",">
+               <if test="date != null and date != ''">DATE=#{date},</if>
+               <if test="number != null and number != ''">NUMBER=#{number},</if>
+            </trim>
+            WHERE 1 = 1
+            <if test="where != null and where != ''">
+                <foreach collection="where" item="value" index="key">
+                    AND ${key}=#{value} 
+                </foreach>
+            </if>
+            <if test="whereNot != null and whereNot != ''">
+                <foreach collection="whereNot" item="value" index="key">
+                 AND ${key}!=#{value} 
+                 </foreach>
+            </if>
+            <if test="like != null and like != ''">
+                <foreach collection="like" item="value" index="key">
+                    AND ${key} LIKE CONCAT('%',#{value},'%')
+                </foreach>
+            </if>
+    </update>
+    
+    <select id="getLottoNumber" parameterType="lotto" resultType="lotto" >
+        SELECT NUMBER, SUM
+        FROM lotto_number
+        WHERE 1 = 1
+        <if test="where != null and where != ''">
+            <foreach collection="where" item="value" index="key">
+                AND ${key}=#{value} 
+            </foreach>
+        </if>
+        <if test="whereNot != null and whereNot != ''">
+            <foreach collection="whereNot" item="value" index="key">
+                AND ${key}!=#{value} 
+            </foreach>
+        </if>
+        <if test="like != null and like != ''">
+            AND
+            <foreach collection="like" item="value" index="key" separator="OR">
+                ${key} LIKE CONCAT('%',#{value},'%')
+            </foreach>
+        </if>
+        ORDER BY DATE DESC
+        <if test="limitEnd != null and limitEnd != ''">
+           LIMIT #{limitStart}, #{limitEnd}
+        </if>
+    </select>
+    
+    <insert id="insertLottoNumber" parameterType="lotto">
+        INSERT INTO lotto_number
+                ( SUM, NUMBER ) 
+        VALUES ( #{sum},#{number} );
+    </insert>
+    
+    <update id="updateLottoNumber" parameterType="lotto">
+        UPDATE lotto_number
+            <trim prefix="SET" suffixOverrides=",">
+               <if test="sum != null and sum != ''">SUM=#{sum},</if>
+               <if test="number != null and number != ''">NUMBER=#{number},</if>
+            </trim>
+            WHERE 1 = 1
+            <if test="where != null and where != ''">
+                <foreach collection="where" item="value" index="key">
+                    AND ${key}=#{value} 
+                </foreach>
+            </if>
+            <if test="whereNot != null and whereNot != ''">
+                <foreach collection="whereNot" item="value" index="key">
+                 AND ${key}!=#{value} 
+                 </foreach>
+            </if>
+            <if test="like != null and like != ''">
+                <foreach collection="like" item="value" index="key">
+                    AND ${key} LIKE CONCAT('%',#{value},'%')
+                </foreach>
+            </if>
+    </update>
+    
     <select id="getLottoDetail" parameterType="lotto" resultType="lotto" >
         SELECT NUMBER, NUMBER_TWO, VALUE
         FROM lotto_number_total
@@ -50,5 +137,36 @@
            LIMIT #{limitStart}, #{limitEnd}
         </if>
     </select>
+    
+    <insert id="insertLottoDetail" parameterType="lotto">
+        INSERT INTO lotto_number_total
+                ( VALUE, NUMBER, NUMBER_TWO ) 
+        VALUES ( #{value},#{number},#{number_two} );
+    </insert>
+    
+    <update id="updateLottoDetail" parameterType="lotto">
+        UPDATE lotto_number_total
+            <trim prefix="SET" suffixOverrides=",">
+               <if test="value != null and value != ''">VALUE=#{value},</if>
+               <if test="number != null and number != ''">NUMBER=#{number},</if>
+               <if test="number_two != null and number_two != ''">NUMBER_TWO=#{number_two},</if>
+            </trim>
+            WHERE 1 = 1
+            <if test="where != null and where != ''">
+                <foreach collection="where" item="value" index="key">
+                    AND ${key}=#{value} 
+                </foreach>
+            </if>
+            <if test="whereNot != null and whereNot != ''">
+                <foreach collection="whereNot" item="value" index="key">
+                 AND ${key}!=#{value} 
+                 </foreach>
+            </if>
+            <if test="like != null and like != ''">
+                <foreach collection="like" item="value" index="key">
+                    AND ${key} LIKE CONCAT('%',#{value},'%')
+                </foreach>
+            </if>
+    </update>
 </mapper>
 

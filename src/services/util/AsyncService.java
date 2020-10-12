@@ -1,9 +1,11 @@
-package hello;
+package services.util;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.springframework.scheduling.annotation.Async;
+
+import model.BaseModel;
 
 public class AsyncService {
     @Async

@@ -12,10 +12,10 @@
     </settings>
 
     <typeAliases>
-        <typeAlias type="hello.BaseModel" alias="base" />
-        <typeAlias type="hello.KospiModel" alias="kospi" />
-        <typeAlias type="hello.CompanyModel" alias="company" />
-        <typeAlias type="hello.LottoModel" alias="lotto" />
+        <typeAlias type="model.BaseModel" alias="base" />
+        <typeAlias type="model.KospiModel" alias="kospi" />
+        <typeAlias type="model.CompanyModel" alias="company" />
+        <typeAlias type="model.LottoModel" alias="lotto" />
     </typeAliases>
 
     <mappers>

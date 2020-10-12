@@ -1,6 +1,10 @@
-package hello;
+package services;
 
 import java.util.List;
+
+import model.CompanyModel;
+import model.KospiModel;
+import model.LottoModel;
 
 public interface BaseService {
     public List<KospiModel> getKospi(KospiModel kospiModel);
@@ -14,7 +18,4 @@ public interface BaseService {
     public void updateTodayCompany(CompanyModel company);
     public void updateKospi200(CompanyModel company);
     public void scheduled();
-    
-    public List<LottoModel> getLotto(LottoModel lottoModel);
-    public List<LottoModel> getLottoDetail(LottoModel lottoModel);
 }
