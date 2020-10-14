@@ -20,10 +20,7 @@ public class LottoController {
     
     @RequestMapping(value = "/lottoTotalUpdate.jin", method = RequestMethod.GET)
     public String getLottoUpdate( Model model ) {
-        //lottoService.totalLottoDataUpdate();
-        LOGGER.info("212123");
-        LOGGER.error("zzzzzzzzzzzzzzzz");
-        LOGGER.trace("Exiting application.");
+        lottoService.totalLottoDataUpdate();
         model.addAttribute("result", "작업이 끝났습니다.");
         return "lottoUpdate"; 
     }
