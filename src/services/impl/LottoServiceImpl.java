@@ -103,6 +103,9 @@ public class LottoServiceImpl implements LottoService {
                     LottoModel tempModel = new LottoModel();
                     tempModel.setNumber(number);
                     tempModel.setValue(String.valueOf(totlaNumber.get(number)));
+                    HashMap<String, String> where = new HashMap<>();
+                    where.put("number", number);
+                    tempModel.setWhere(where);
                     
                     TaskLotto2 task2 = new TaskLotto2( tempModel, lottoDao );
                     Future<Boolean> returnBoolean = executorServiceWithCached.submit(task2);
@@ -124,6 +127,11 @@ public class LottoServiceImpl implements LottoService {
                     tempModel.setValue( String.valueOf( totlaTwoNumber.get(numberset)));
                     tempModel.setNumber(firstNum);
                     tempModel.setNumber_two(seconNum);
+                    
+                    HashMap<String, String> where = new HashMap<String, String>();
+                    where.put("NUMBER", firstNum);
+                    where.put("NUMBER_TWO", seconNum);
+                    tempModel.setWhere(where);
                     TaskLotto3 task3 = new TaskLotto3( tempModel, lottoDao );
                     executorServiceWithCached.submit(task3);
                 }
@@ -168,15 +176,19 @@ public class LottoServiceImpl implements LottoService {
                 Element table  = doc.select("table.tbl_data.tbl_data_col tbody").get(0);
                 Elements tr   = table.select("tr");
                 for ( Element item : tr ) {
+                    LottoModel tempModel = new LottoModel();
                     Elements td = item.select("td");
                     String date = td.get(0).text();
                     String number = td.get(2).text();
                     
+                    
+                    tempModel.setDate(date);
+                    tempModel.setNumber(number);
                     HashMap<String, String> where = new HashMap<>();
                     where.put("DATE", date);
                     where.put("NUMBER", number);
                     
-                    LottoModel tempModel = new LottoModel();
+                    
                     tempModel.setWhere(where);
                     List<LottoModel> list = lottoDao.getLotto(tempModel);
                     

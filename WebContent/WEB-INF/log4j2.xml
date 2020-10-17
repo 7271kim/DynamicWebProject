@@ -86,7 +86,6 @@
         <!-- ResultSet을 포함한 모든 JDBC 호출 정보를 로그로 남기므로 매우 방대한 양의 로그가 생성된다.  -->
         <!--  SQL 결과 조회된 데이터의 table을 로그로 남긴다. -->
         <Logger name="log4jdbc.log4j2"  additivity="false">
-            <MarkerFilter marker="LOG4JDBC_JDBC" onMatch="DENY" onMismatch="ACCEPT"/>
             <AppenderRef ref="console" level="INFO"/>
             <AppenderRef ref="sql_info_file" level="INFO"/>
             <AppenderRef ref="sql_error_file" level="ERROR"/>

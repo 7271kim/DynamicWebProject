@@ -77,7 +77,7 @@
                 ${key} LIKE CONCAT('%',#{value},'%')
             </foreach>
         </if>
-        ORDER BY DATE DESC
+        ORDER BY SUM
         <if test="limitEnd != null and limitEnd != ''">
            LIMIT #{limitStart}, #{limitEnd}
         </if>
